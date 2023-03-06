@@ -6,12 +6,20 @@
 pragma solidity 0.8.4;
 pragma experimental ABIEncoderV2;
 
+import "../lib/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "../lib/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "../lib/@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "../lib/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "../lib/@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "../lib/@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "../lib/@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol";
+import "../lib/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../lib/main/CirculatingSupply.sol";
+import "../lib/main/Math.sol";
+import "../lib/main/Claimable.sol";
 
 
-contract MQMTokenV1 is Initializable, CirculatingSupply{
+contract MQMTokenV1 is Math, Claimable, PausableUpgradeable, ERC20PermitUpgradeable{
 	using AddressUpgradeable for address;
 	using SafeMathUpgradeable for uint256;
 	using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -44,10 +52,7 @@ contract MQMTokenV1 is Initializable, CirculatingSupply{
      *
      */
 
-	function transferMany(address[] calldata recipients, uint256[] calldata amounts)
-        external
-	    onlyOwner()
-		whenNotPaused()
+	function transferMany(address[] calldata recipients, uint256[] calldata amounts) external onlyOwner() whenNotPaused()
     {
         require(recipients.length == amounts.length, "ERC20 MQM: Wrong array length");
 
@@ -106,26 +111,6 @@ contract MQMTokenV1 is Initializable, CirculatingSupply{
         _burn(_msgSender(), amount);
     }
 
-	/**
-     * @dev Override the Hook of Open Zeppelin for checking before execute the method transfer/transferFrom/mint/burn.
-	 * @param sender Addres of Sender of the token
-     * @param amount Amount token to transfer/transferFrom/mint/burn, Verify that in hook _beforeTokenTransfer
-     */
-	function canTransfer(address sender, uint256 amount) public view returns (bool) {
-        // Control is scheduled wallet
-        if (!frozenWallets[sender].scheduled) {
-            return true;
-        }
-
-        uint256 balance = balanceOf(sender);
-        uint256 restAmount = getRestAmount(sender);
-
-		if(balance.sub(restAmount) < amount) {
-			return false;
-		}
-
-        return true;
-	}
 
 	/**
      * @dev Override the Hook of Open Zeppelin for checking before execute the method transfer/transferFrom/mint/burn.
@@ -140,7 +125,6 @@ contract MQMTokenV1 is Initializable, CirculatingSupply{
 		if (_msgSender() != owner()) {
 			require(!paused(), "ERC20 MQM: token transfer/mint/burn while paused");
 		}
-        require(canTransfer(sender, amount), "ERC20 MQM: Frozen sender wallet");
         super._beforeTokenTransfer(sender, recipient, amount);
     }
 

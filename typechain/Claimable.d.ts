@@ -22,22 +22,22 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface ClaimableInterface extends ethers.utils.Interface {
   functions: {
     "addBlacklist(address)": FunctionFragment;
-    "addOmniWallet(address)": FunctionFragment;
+    "addMetaQuantumWallet(address)": FunctionFragment;
     "addWhiteListed(address)": FunctionFragment;
     "claimValues(address,address)": FunctionFragment;
     "disableBurnBeforeBlockNumber()": FunctionFragment;
     "disableTransfers(uint256)": FunctionFragment;
     "dropBlacklist(address)": FunctionFragment;
-    "dropOmniWallet(address)": FunctionFragment;
+    "dropMetaQuantumWallet(address)": FunctionFragment;
     "dropWhiteListed(address)": FunctionFragment;
     "getBlacklist()": FunctionFragment;
     "getBurnBeforeBlockNumber()": FunctionFragment;
     "getBurnBeforeBlockNumberDisabled()": FunctionFragment;
     "getIsTransferDisabled()": FunctionFragment;
-    "getOmniWallets()": FunctionFragment;
+    "getMetaQuantumWallets()": FunctionFragment;
     "getWhiteListWallets()": FunctionFragment;
     "isBlacklisted(address)": FunctionFragment;
-    "isOmniWallet(address)": FunctionFragment;
+    "isMetaQuantumWallet(address)": FunctionFragment;
     "isWhiteListed(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -49,7 +49,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "addOmniWallet",
+    functionFragment: "addMetaQuantumWallet",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -73,7 +73,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "dropOmniWallet",
+    functionFragment: "dropMetaQuantumWallet",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -97,7 +97,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getOmniWallets",
+    functionFragment: "getMetaQuantumWallets",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -109,7 +109,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "isOmniWallet",
+    functionFragment: "isMetaQuantumWallet",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -131,7 +131,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addOmniWallet",
+    functionFragment: "addMetaQuantumWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -155,7 +155,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "dropOmniWallet",
+    functionFragment: "dropMetaQuantumWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -179,7 +179,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getOmniWallets",
+    functionFragment: "getMetaQuantumWallets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -191,7 +191,7 @@ interface ClaimableInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isOmniWallet",
+    functionFragment: "isMetaQuantumWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -211,10 +211,10 @@ interface ClaimableInterface extends ethers.utils.Interface {
   events: {
     "DisableDefenseAntiBots(uint256,bool)": EventFragment;
     "InBlacklisted(address)": EventFragment;
-    "InOmniWallet(address)": EventFragment;
+    "InMetaQuantumWallet(address)": EventFragment;
     "InWhiteListWallet(address)": EventFragment;
     "OutBlacklisted(address)": EventFragment;
-    "OutOmniWallet(address)": EventFragment;
+    "OutMetaQuantumWallet(address)": EventFragment;
     "OutWhiteListWallet(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "TransferBurned(address,uint256)": EventFragment;
@@ -223,10 +223,10 @@ interface ClaimableInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "DisableDefenseAntiBots"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InBlacklisted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "InOmniWallet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "InMetaQuantumWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InWhiteListWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OutBlacklisted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OutOmniWallet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OutMetaQuantumWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OutWhiteListWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TransferBurned"): EventFragment;
@@ -287,12 +287,12 @@ export class Claimable extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -347,12 +347,12 @@ export class Claimable extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -389,9 +389,9 @@ export class Claimable extends Contract {
 
     "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<[boolean]>;
 
-    getOmniWallets(overrides?: CallOverrides): Promise<[string[]]>;
+    getMetaQuantumWallets(overrides?: CallOverrides): Promise<[string[]]>;
 
-    "getOmniWallets()"(overrides?: CallOverrides): Promise<[string[]]>;
+    "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<[string[]]>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<[string[]]>;
 
@@ -407,12 +407,12 @@ export class Claimable extends Contract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    isOmniWallet(
+    isMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    "isOmniWallet(address)"(
+    "isMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -460,12 +460,12 @@ export class Claimable extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  addOmniWallet(
+  addMetaQuantumWallet(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "addOmniWallet(address)"(
+  "addMetaQuantumWallet(address)"(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -520,12 +520,12 @@ export class Claimable extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  dropOmniWallet(
+  dropMetaQuantumWallet(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "dropOmniWallet(address)"(
+  "dropMetaQuantumWallet(address)"(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -558,9 +558,9 @@ export class Claimable extends Contract {
 
   "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<boolean>;
 
-  getOmniWallets(overrides?: CallOverrides): Promise<string[]>;
+  getMetaQuantumWallets(overrides?: CallOverrides): Promise<string[]>;
 
-  "getOmniWallets()"(overrides?: CallOverrides): Promise<string[]>;
+  "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<string[]>;
 
   getWhiteListWallets(overrides?: CallOverrides): Promise<string[]>;
 
@@ -573,9 +573,12 @@ export class Claimable extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  isOmniWallet(_account: string, overrides?: CallOverrides): Promise<boolean>;
+  isMetaQuantumWallet(
+    _account: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
-  "isOmniWallet(address)"(
+  "isMetaQuantumWallet(address)"(
     _account: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -617,12 +620,12 @@ export class Claimable extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -670,12 +673,12 @@ export class Claimable extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -710,9 +713,9 @@ export class Claimable extends Contract {
 
     "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<boolean>;
 
-    getOmniWallets(overrides?: CallOverrides): Promise<string[]>;
+    getMetaQuantumWallets(overrides?: CallOverrides): Promise<string[]>;
 
-    "getOmniWallets()"(overrides?: CallOverrides): Promise<string[]>;
+    "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<string[]>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<string[]>;
 
@@ -728,9 +731,12 @@ export class Claimable extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    isOmniWallet(_account: string, overrides?: CallOverrides): Promise<boolean>;
+    isMetaQuantumWallet(
+      _account: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
-    "isOmniWallet(address)"(
+    "isMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -777,7 +783,7 @@ export class Claimable extends Contract {
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
-    InOmniWallet(
+    InMetaQuantumWallet(
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
@@ -789,7 +795,7 @@ export class Claimable extends Contract {
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
-    OutOmniWallet(
+    OutMetaQuantumWallet(
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
@@ -833,12 +839,12 @@ export class Claimable extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -893,12 +899,12 @@ export class Claimable extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -933,9 +939,9 @@ export class Claimable extends Contract {
 
     "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getOmniWallets(overrides?: CallOverrides): Promise<BigNumber>;
+    getMetaQuantumWallets(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "getOmniWallets()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -951,12 +957,12 @@ export class Claimable extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isOmniWallet(
+    isMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "isOmniWallet(address)"(
+    "isMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1005,12 +1011,12 @@ export class Claimable extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1065,12 +1071,12 @@ export class Claimable extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1113,9 +1119,11 @@ export class Claimable extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getOmniWallets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getMetaQuantumWallets(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    "getOmniWallets()"(
+    "getMetaQuantumWallets()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1137,12 +1145,12 @@ export class Claimable extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isOmniWallet(
+    isMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "isOmniWallet(address)"(
+    "isMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

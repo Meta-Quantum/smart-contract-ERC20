@@ -2,11 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ERC20Token } from "./ERC20Token";
-export type { FakeTokenV2 } from "./FakeTokenV2";
-export type { FakeTokenV3 } from "./FakeTokenV3";
-export type { OmniTokenV1 } from "./OmniTokenV1";
-export type { OmniTokenV2 } from "./OmniTokenV2";
-export type { OmniTokenV3 } from "./OmniTokenV3";
+export type { MQMTokenV1 } from "./MQMTokenV1";
 export type { OwnableUpgradeable } from "./OwnableUpgradeable";
 export type { IERC1271Upgradeable } from "./IERC1271Upgradeable";
 export type { PausableUpgradeable } from "./PausableUpgradeable";
@@ -19,14 +15,9 @@ export type { Antibots } from "./Antibots";
 export type { Blacklistable } from "./Blacklistable";
 export type { CirculatingSupply } from "./CirculatingSupply";
 export type { Claimable } from "./Claimable";
-export type { Vesting } from "./Vesting";
 
 export { ERC20Token__factory } from "./factories/ERC20Token__factory";
-export { FakeTokenV2__factory } from "./factories/FakeTokenV2__factory";
-export { FakeTokenV3__factory } from "./factories/FakeTokenV3__factory";
-export { OmniTokenV1__factory } from "./factories/OmniTokenV1__factory";
-export { OmniTokenV2__factory } from "./factories/OmniTokenV2__factory";
-export { OmniTokenV3__factory } from "./factories/OmniTokenV3__factory";
+export { MQMTokenV1__factory } from "./factories/MQMTokenV1__factory";
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
 export { IERC1271Upgradeable__factory } from "./factories/IERC1271Upgradeable__factory";
 export { PausableUpgradeable__factory } from "./factories/PausableUpgradeable__factory";
@@ -39,4 +30,3 @@ export { Antibots__factory } from "./factories/Antibots__factory";
 export { Blacklistable__factory } from "./factories/Blacklistable__factory";
 export { CirculatingSupply__factory } from "./factories/CirculatingSupply__factory";
 export { Claimable__factory } from "./factories/Claimable__factory";
-export { Vesting__factory } from "./factories/Vesting__factory";

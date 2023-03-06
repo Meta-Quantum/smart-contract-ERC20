@@ -19,18 +19,16 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface FakeTokenInterface extends ethers.utils.Interface {
+interface MQMTokenV1Interface extends ethers.utils.Interface {
   functions: {
     "DOMAIN_SEPARATOR()": FunctionFragment;
-    "addAllocations(address[],uint256[],uint256)": FunctionFragment;
     "addBlacklist(address)": FunctionFragment;
-    "addOmniWallet(address)": FunctionFragment;
+    "addMetaQuantumWallet(address)": FunctionFragment;
     "addWhiteListed(address)": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
-    "canTransfer(address,uint256)": FunctionFragment;
     "circulatingSupply()": FunctionFragment;
     "claimValues(address,address)": FunctionFragment;
     "decimals()": FunctionFragment;
@@ -38,27 +36,19 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     "disableBurnBeforeBlockNumber()": FunctionFragment;
     "disableTransfers(uint256)": FunctionFragment;
     "dropBlacklist(address)": FunctionFragment;
-    "dropOmniWallet(address)": FunctionFragment;
+    "dropMetaQuantumWallet(address)": FunctionFragment;
     "dropWhiteListed(address)": FunctionFragment;
-    "frozenWallets(address)": FunctionFragment;
     "getBlacklist()": FunctionFragment;
     "getBurnBeforeBlockNumber()": FunctionFragment;
     "getBurnBeforeBlockNumberDisabled()": FunctionFragment;
-    "getDays(uint256)": FunctionFragment;
     "getIsTransferDisabled()": FunctionFragment;
     "getMaxTotalSupply()": FunctionFragment;
-    "getMonths(uint256)": FunctionFragment;
-    "getOmniWallets()": FunctionFragment;
-    "getReleaseTime()": FunctionFragment;
-    "getRestAmount(address)": FunctionFragment;
-    "getTimestamp()": FunctionFragment;
-    "getTransferableAmount(address)": FunctionFragment;
+    "getMetaQuantumWallets()": FunctionFragment;
     "getWhiteListWallets()": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "initialize()": FunctionFragment;
     "isBlacklisted(address)": FunctionFragment;
-    "isOmniWallet(address)": FunctionFragment;
-    "isStarted(uint256)": FunctionFragment;
+    "isMetaQuantumWallet(address)": FunctionFragment;
     "isWhiteListed(address)": FunctionFragment;
     "mint(uint256)": FunctionFragment;
     "name()": FunctionFragment;
@@ -75,7 +65,6 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferMany(address[],uint256[])": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "vestingTypes(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -83,15 +72,11 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "addAllocations",
-    values: [string[], BigNumberish[], BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "addBlacklist",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "addOmniWallet",
+    functionFragment: "addMetaQuantumWallet",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -108,10 +93,6 @@ interface FakeTokenInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
-  encodeFunctionData(
-    functionFragment: "canTransfer",
-    values: [string, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "circulatingSupply",
     values?: undefined
@@ -138,15 +119,11 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "dropOmniWallet",
+    functionFragment: "dropMetaQuantumWallet",
     values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "dropWhiteListed",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "frozenWallets",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -162,10 +139,6 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getDays",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getIsTransferDisabled",
     values?: undefined
   ): string;
@@ -174,28 +147,8 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getMonths",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getOmniWallets",
+    functionFragment: "getMetaQuantumWallets",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getReleaseTime",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRestAmount",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTimestamp",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTransferableAmount",
-    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getWhiteListWallets",
@@ -214,12 +167,8 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "isOmniWallet",
+    functionFragment: "isMetaQuantumWallet",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isStarted",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isWhiteListed",
@@ -272,17 +221,9 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
-  encodeFunctionData(
-    functionFragment: "vestingTypes",
-    values: [BigNumberish]
-  ): string;
 
   decodeFunctionResult(
     functionFragment: "DOMAIN_SEPARATOR",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "addAllocations",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -290,7 +231,7 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addOmniWallet",
+    functionFragment: "addMetaQuantumWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -301,10 +242,6 @@ interface FakeTokenInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "canTransfer",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "circulatingSupply",
     data: BytesLike
@@ -331,15 +268,11 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "dropOmniWallet",
+    functionFragment: "dropMetaQuantumWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "dropWhiteListed",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "frozenWallets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -354,7 +287,6 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     functionFragment: "getBurnBeforeBlockNumberDisabled",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getDays", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getIsTransferDisabled",
     data: BytesLike
@@ -363,25 +295,8 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     functionFragment: "getMaxTotalSupply",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getMonths", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getOmniWallets",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getReleaseTime",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRestAmount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTimestamp",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTransferableAmount",
+    functionFragment: "getMetaQuantumWallets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -398,10 +313,9 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isOmniWallet",
+    functionFragment: "isMetaQuantumWallet",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "isStarted", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isWhiteListed",
     data: BytesLike
@@ -436,19 +350,15 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "vestingTypes",
-    data: BytesLike
-  ): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "DisableDefenseAntiBots(uint256,bool)": EventFragment;
     "InBlacklisted(address)": EventFragment;
-    "InOmniWallet(address)": EventFragment;
+    "InMetaQuantumWallet(address)": EventFragment;
     "InWhiteListWallet(address)": EventFragment;
     "OutBlacklisted(address)": EventFragment;
-    "OutOmniWallet(address)": EventFragment;
+    "OutMetaQuantumWallet(address)": EventFragment;
     "OutWhiteListWallet(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
@@ -456,16 +366,15 @@ interface FakeTokenInterface extends ethers.utils.Interface {
     "TransferBurned(address,uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
     "ValueReceived(address,uint256)": EventFragment;
-    "inFrozenWallet(bool,uint32,uint32,address,uint256,uint256,uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DisableDefenseAntiBots"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InBlacklisted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "InOmniWallet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "InMetaQuantumWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InWhiteListWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OutBlacklisted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OutOmniWallet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OutMetaQuantumWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OutWhiteListWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
@@ -473,10 +382,9 @@ interface FakeTokenInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "TransferBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ValueReceived"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "inFrozenWallet"): EventFragment;
 }
 
-export class FakeToken extends Contract {
+export class MQMTokenV1 extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -517,26 +425,12 @@ export class FakeToken extends Contract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: FakeTokenInterface;
+  interface: MQMTokenV1Interface;
 
   functions: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<[string]>;
 
     "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<[string]>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     addBlacklist(
       _account: string,
@@ -548,12 +442,12 @@ export class FakeToken extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -608,18 +502,6 @@ export class FakeToken extends Contract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
 
     circulatingSupply(
       overrides?: CallOverrides
@@ -685,12 +567,12 @@ export class FakeToken extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -704,56 +586,6 @@ export class FakeToken extends Contract {
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    frozenWallets(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
 
     getBlacklist(overrides?: CallOverrides): Promise<[string[]]>;
 
@@ -773,16 +605,6 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { dias: BigNumber }>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { dias: BigNumber }>;
-
     getIsTransferDisabled(overrides?: CallOverrides): Promise<[boolean]>;
 
     "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<[boolean]>;
@@ -791,47 +613,9 @@ export class FakeToken extends Contract {
 
     "getMaxTotalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getMonths(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { months: BigNumber }>;
+    getMetaQuantumWallets(overrides?: CallOverrides): Promise<[string[]]>;
 
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { months: BigNumber }>;
-
-    getOmniWallets(overrides?: CallOverrides): Promise<[string[]]>;
-
-    "getOmniWallets()"(overrides?: CallOverrides): Promise<[string[]]>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "getReleaseTime()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { restAmount: BigNumber }>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { restAmount: BigNumber }>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { transferableAmount: BigNumber }>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { transferableAmount: BigNumber }>;
+    "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<[string[]]>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<[string[]]>;
 
@@ -867,23 +651,13 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    isOmniWallet(
+    isMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    "isOmniWallet(address)"(
+    "isMetaQuantumWallet(address)"(
       _account: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
@@ -1035,71 +809,11 @@ export class FakeToken extends Contract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
-
-    "vestingTypes(uint256)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
   };
 
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
   "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<string>;
-
-  addAllocations(
-    addresses: string[],
-    totalAmounts: BigNumberish[],
-    vestingTypeIndex: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  "addAllocations(address[],uint256[],uint256)"(
-    addresses: string[],
-    totalAmounts: BigNumberish[],
-    vestingTypeIndex: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   addBlacklist(
     _account: string,
@@ -1111,12 +825,12 @@ export class FakeToken extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  addOmniWallet(
+  addMetaQuantumWallet(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "addOmniWallet(address)"(
+  "addMetaQuantumWallet(address)"(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1171,18 +885,6 @@ export class FakeToken extends Contract {
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  canTransfer(
-    sender: string,
-    amount: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "canTransfer(address,uint256)"(
-    sender: string,
-    amount: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
 
   circulatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1244,12 +946,12 @@ export class FakeToken extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  dropOmniWallet(
+  dropMetaQuantumWallet(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "dropOmniWallet(address)"(
+  "dropMetaQuantumWallet(address)"(
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1263,56 +965,6 @@ export class FakeToken extends Contract {
     _account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  frozenWallets(
-    arg0: string,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      boolean,
-      number,
-      number,
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      scheduled: boolean;
-      startDay: number;
-      afterDays: number;
-      wallet: string;
-      totalAmount: BigNumber;
-      dailyAmount: BigNumber;
-      monthlyAmount: BigNumber;
-      initialAmount: BigNumber;
-    }
-  >;
-
-  "frozenWallets(address)"(
-    arg0: string,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      boolean,
-      number,
-      number,
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      scheduled: boolean;
-      startDay: number;
-      afterDays: number;
-      wallet: string;
-      totalAmount: BigNumber;
-      dailyAmount: BigNumber;
-      monthlyAmount: BigNumber;
-      initialAmount: BigNumber;
-    }
-  >;
 
   getBlacklist(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1328,16 +980,6 @@ export class FakeToken extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  getDays(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "getDays(uint256)"(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   getIsTransferDisabled(overrides?: CallOverrides): Promise<boolean>;
 
   "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<boolean>;
@@ -1346,44 +988,9 @@ export class FakeToken extends Contract {
 
   "getMaxTotalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getMonths(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  getMetaQuantumWallets(overrides?: CallOverrides): Promise<string[]>;
 
-  "getMonths(uint256)"(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getOmniWallets(overrides?: CallOverrides): Promise<string[]>;
-
-  "getOmniWallets()"(overrides?: CallOverrides): Promise<string[]>;
-
-  getReleaseTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "getReleaseTime()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getRestAmount(sender: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  "getRestAmount(address)"(
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "getTimestamp()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getTransferableAmount(
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "getTransferableAmount(address)"(
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<string[]>;
 
   getWhiteListWallets(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1416,20 +1023,13 @@ export class FakeToken extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  isOmniWallet(_account: string, overrides?: CallOverrides): Promise<boolean>;
-
-  "isOmniWallet(address)"(
+  isMetaQuantumWallet(
     _account: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  isStarted(
-    startDay: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "isStarted(uint256)"(
-    startDay: BigNumberish,
+  "isMetaQuantumWallet(address)"(
+    _account: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -1579,70 +1179,10 @@ export class FakeToken extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  vestingTypes(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      boolean
-    ] & {
-      dailyRate: BigNumber;
-      initialRate: BigNumber;
-      afterDays: BigNumber;
-      monthRate: BigNumber;
-      monthDelay: BigNumber;
-      vesting: boolean;
-      vestingType: boolean;
-    }
-  >;
-
-  "vestingTypes(uint256)"(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      boolean
-    ] & {
-      dailyRate: BigNumber;
-      initialRate: BigNumber;
-      afterDays: BigNumber;
-      monthRate: BigNumber;
-      monthDelay: BigNumber;
-      vesting: boolean;
-      vestingType: boolean;
-    }
-  >;
-
   callStatic: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
     "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<string>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     addBlacklist(_account: string, overrides?: CallOverrides): Promise<void>;
 
@@ -1651,12 +1191,12 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -1708,18 +1248,6 @@ export class FakeToken extends Contract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     circulatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1774,12 +1302,12 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -1793,56 +1321,6 @@ export class FakeToken extends Contract {
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    frozenWallets(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
 
     getBlacklist(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1860,16 +1338,6 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getIsTransferDisabled(overrides?: CallOverrides): Promise<boolean>;
 
     "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<boolean>;
@@ -1878,47 +1346,9 @@ export class FakeToken extends Contract {
 
     "getMaxTotalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getMonths(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getMetaQuantumWallets(overrides?: CallOverrides): Promise<string[]>;
 
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getOmniWallets(overrides?: CallOverrides): Promise<string[]>;
-
-    "getOmniWallets()"(overrides?: CallOverrides): Promise<string[]>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getReleaseTime()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<string[]>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1950,20 +1380,13 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    isOmniWallet(_account: string, overrides?: CallOverrides): Promise<boolean>;
-
-    "isOmniWallet(address)"(
+    isMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
+    "isMetaQuantumWallet(address)"(
+      _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -2102,52 +1525,6 @@ export class FakeToken extends Contract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
-
-    "vestingTypes(uint256)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
   };
 
   filters: {
@@ -2172,7 +1549,7 @@ export class FakeToken extends Contract {
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
-    InOmniWallet(
+    InMetaQuantumWallet(
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
@@ -2184,7 +1561,7 @@ export class FakeToken extends Contract {
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
-    OutOmniWallet(
+    OutMetaQuantumWallet(
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
@@ -2228,58 +1605,12 @@ export class FakeToken extends Contract {
       [string, BigNumber],
       { sender: string; value: BigNumber }
     >;
-
-    inFrozenWallet(
-      scheduled: null,
-      startDay: null,
-      afterDays: null,
-      wallet: string | null,
-      totalAmount: BigNumberish | null,
-      dailyAmount: null,
-      monthlyAmount: null,
-      initialAmount: null
-    ): TypedEventFilter<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ],
-      {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
   };
 
   estimateGas: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
     "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
 
     addBlacklist(
       _account: string,
@@ -2291,12 +1622,12 @@ export class FakeToken extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -2350,18 +1681,6 @@ export class FakeToken extends Contract {
     "burn(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     circulatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
@@ -2424,12 +1743,12 @@ export class FakeToken extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -2442,13 +1761,6 @@ export class FakeToken extends Contract {
     "dropWhiteListed(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    frozenWallets(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getBlacklist(overrides?: CallOverrides): Promise<BigNumber>;
@@ -2467,16 +1779,6 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getIsTransferDisabled(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -2485,47 +1787,9 @@ export class FakeToken extends Contract {
 
     "getMaxTotalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getMonths(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getMetaQuantumWallets(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getOmniWallets(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getOmniWallets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getReleaseTime()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2561,23 +1825,13 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isOmniWallet(
+    isMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "isOmniWallet(address)"(
+    "isMetaQuantumWallet(address)"(
       _account: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2729,16 +1983,6 @@ export class FakeToken extends Contract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "vestingTypes(uint256)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -2746,20 +1990,6 @@ export class FakeToken extends Contract {
 
     "DOMAIN_SEPARATOR()"(
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     addBlacklist(
@@ -2772,12 +2002,12 @@ export class FakeToken extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    addOmniWallet(
+    addMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "addOmniWallet(address)"(
+    "addMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -2834,18 +2064,6 @@ export class FakeToken extends Contract {
     "burn(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     circulatingSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -2910,12 +2128,12 @@ export class FakeToken extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    dropOmniWallet(
+    dropMetaQuantumWallet(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "dropOmniWallet(address)"(
+    "dropMetaQuantumWallet(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -2928,16 +2146,6 @@ export class FakeToken extends Contract {
     "dropWhiteListed(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    frozenWallets(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getBlacklist(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -2960,16 +2168,6 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getIsTransferDisabled(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -2984,49 +2182,11 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getMonths(
-      afterDays: BigNumberish,
+    getMetaQuantumWallets(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getOmniWallets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "getOmniWallets()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "getReleaseTime()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
+    "getMetaQuantumWallets()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -3068,23 +2228,13 @@ export class FakeToken extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isOmniWallet(
+    isMetaQuantumWallet(
       _account: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "isOmniWallet(address)"(
+    "isMetaQuantumWallet(address)"(
       _account: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -3238,16 +2388,6 @@ export class FakeToken extends Contract {
     "transferOwnership(address)"(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "vestingTypes(uint256)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

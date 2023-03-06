@@ -53,8 +53,6 @@ npx hardhat test
 - URL_TESTNET_POLYGON=
 - URL_MAINNET_BSC=https://bsc-dataseed1.binance.org
 - URL_TESTNET_BSC=https://data-seed-prebsc-1-s1.binance.org:8545
-- URL_BSC=https://bsc-dataseed1.binance.org
-- URL_TESTNET_BSC=https://data-seed-prebsc-1-s1.binance.org:8545
 
 
 ---
