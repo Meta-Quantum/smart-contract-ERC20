@@ -12,6 +12,7 @@ import {
   Contract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -28,6 +29,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "bridge(uint256)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "circulatingSupply()": FunctionFragment;
     "claimValues(address,address)": FunctionFragment;
@@ -38,33 +40,51 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "dropBlacklist(address)": FunctionFragment;
     "dropMetaQuantumWallet(address)": FunctionFragment;
     "dropWhiteListed(address)": FunctionFragment;
+    "failedMessages(uint16,bytes,uint64)": FunctionFragment;
+    "forceResumeReceive(uint16,bytes)": FunctionFragment;
     "getBlacklist()": FunctionFragment;
     "getBurnBeforeBlockNumber()": FunctionFragment;
     "getBurnBeforeBlockNumberDisabled()": FunctionFragment;
+    "getConfig(uint16,uint16,address,uint256)": FunctionFragment;
+    "getDestChainId()": FunctionFragment;
+    "getGasLimit(bytes)": FunctionFragment;
     "getIsTransferDisabled()": FunctionFragment;
     "getMaxTotalSupply()": FunctionFragment;
     "getMetaQuantumWallets()": FunctionFragment;
     "getWhiteListWallets()": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize()": FunctionFragment;
+    "initialize(address)": FunctionFragment;
     "isBlacklisted(address)": FunctionFragment;
     "isMetaQuantumWallet(address)": FunctionFragment;
+    "isTrustedRemote(uint16,bytes)": FunctionFragment;
     "isWhiteListed(address)": FunctionFragment;
+    "lzEndpoint()": FunctionFragment;
+    "lzReceive(uint16,bytes,uint64,bytes)": FunctionFragment;
+    "minDstGasLookup(uint16,uint256)": FunctionFragment;
     "mint(uint256)": FunctionFragment;
     "name()": FunctionFragment;
+    "nonblockingLzReceive(uint16,bytes,uint64,bytes)": FunctionFragment;
     "nonces(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "pause(bool)": FunctionFragment;
     "paused()": FunctionFragment;
     "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "retryMessage(uint16,bytes,uint64,bytes)": FunctionFragment;
     "rsvToSig(bytes32,bytes32,uint8)": FunctionFragment;
+    "setConfig(uint16,uint16,uint256,bytes)": FunctionFragment;
+    "setMinDstGasLookup(uint16,uint256,uint256)": FunctionFragment;
+    "setReceiveVersion(uint16)": FunctionFragment;
+    "setSendVersion(uint16)": FunctionFragment;
+    "setTrustedRemote(uint16,bytes)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferMany(address[],uint256[])": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "trustAddress(address)": FunctionFragment;
+    "trustedRemoteLookup(uint16)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -92,6 +112,10 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "bridge",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "circulatingSupply",
@@ -127,6 +151,14 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
+    functionFragment: "failedMessages",
+    values: [BigNumberish, BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "forceResumeReceive",
+    values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getBlacklist",
     values?: undefined
   ): string;
@@ -137,6 +169,18 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getBurnBeforeBlockNumberDisabled",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getConfig",
+    values: [BigNumberish, BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getDestChainId",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getGasLimit",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "getIsTransferDisabled",
@@ -158,10 +202,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "increaseAllowance",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "initialize",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
   encodeFunctionData(
     functionFragment: "isBlacklisted",
     values: [string]
@@ -171,11 +212,31 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
+    functionFragment: "isTrustedRemote",
+    values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "isWhiteListed",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "lzEndpoint",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lzReceive",
+    values: [BigNumberish, BytesLike, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "minDstGasLookup",
+    values: [BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "nonblockingLzReceive",
+    values: [BigNumberish, BytesLike, BigNumberish, BytesLike]
+  ): string;
   encodeFunctionData(functionFragment: "nonces", values: [string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values: [boolean]): string;
@@ -197,8 +258,32 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "retryMessage",
+    values: [BigNumberish, BytesLike, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "rsvToSig",
     values: [BytesLike, BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setConfig",
+    values: [BigNumberish, BigNumberish, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMinDstGasLookup",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setReceiveVersion",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSendVersion",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setTrustedRemote",
+    values: [BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
@@ -221,6 +306,14 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "trustAddress",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "trustedRemoteLookup",
+    values: [BigNumberish]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "DOMAIN_SEPARATOR",
@@ -241,6 +334,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "bridge", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "circulatingSupply",
@@ -276,6 +370,14 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "failedMessages",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "forceResumeReceive",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getBlacklist",
     data: BytesLike
   ): Result;
@@ -285,6 +387,15 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getBurnBeforeBlockNumberDisabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getConfig", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getDestChainId",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getGasLimit",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -317,11 +428,25 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "isTrustedRemote",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "isWhiteListed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "lzEndpoint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "lzReceive", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "minDstGasLookup",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "nonblockingLzReceive",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "nonces", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
@@ -331,7 +456,28 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "retryMessage",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "rsvToSig", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setConfig", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setMinDstGasLookup",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setReceiveVersion",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSendVersion",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setTrustedRemote",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -350,6 +496,14 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "trustAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "trustedRemoteLookup",
+    data: BytesLike
+  ): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -357,11 +511,14 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "InBlacklisted(address)": EventFragment;
     "InMetaQuantumWallet(address)": EventFragment;
     "InWhiteListWallet(address)": EventFragment;
+    "MessageFailed(uint16,bytes,uint64,bytes)": EventFragment;
     "OutBlacklisted(address)": EventFragment;
     "OutMetaQuantumWallet(address)": EventFragment;
     "OutWhiteListWallet(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
+    "SetMinDstGasLookup(uint16,uint256,uint256)": EventFragment;
+    "SetTrustedRemote(uint16,bytes)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "TransferBurned(address,uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
@@ -373,11 +530,14 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "InBlacklisted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InMetaQuantumWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InWhiteListWallet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MessageFailed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OutBlacklisted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OutMetaQuantumWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OutWhiteListWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetMinDstGasLookup"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetTrustedRemote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TransferBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
@@ -493,6 +653,16 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    bridge(
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "bridge(uint256)"(
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     burn(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -587,6 +757,32 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    failedMessages(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "failedMessages(uint16,bytes,uint64)"(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    forceResumeReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "forceResumeReceive(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     getBlacklist(overrides?: CallOverrides): Promise<[string[]]>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<[string[]]>;
@@ -604,6 +800,36 @@ export class MQMTokenV1 extends Contract {
     "getBurnBeforeBlockNumberDisabled()"(
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    getConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "getConfig(uint16,uint16,address,uint256)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getDestChainId(overrides?: CallOverrides): Promise<[number]>;
+
+    "getDestChainId()"(overrides?: CallOverrides): Promise<[number]>;
+
+    getGasLimit(
+      _adapterParams: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { gasLimit: BigNumber }>;
+
+    "getGasLimit(bytes)"(
+      _adapterParams: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { gasLimit: BigNumber }>;
 
     getIsTransferDisabled(overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -634,10 +860,12 @@ export class MQMTokenV1 extends Contract {
     ): Promise<ContractTransaction>;
 
     initialize(
+      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "initialize()"(
+    "initialize(address)"(
+      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -661,6 +889,18 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    isTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    "isTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     isWhiteListed(
       _account: string,
       overrides?: CallOverrides
@@ -670,6 +910,38 @@ export class MQMTokenV1 extends Contract {
       _account: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    lzEndpoint(overrides?: CallOverrides): Promise<[string]>;
+
+    "lzEndpoint()"(overrides?: CallOverrides): Promise<[string]>;
+
+    lzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "lzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    minDstGasLookup(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "minDstGasLookup(uint16,uint256)"(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     mint(
       _amount: BigNumberish,
@@ -684,6 +956,22 @@ export class MQMTokenV1 extends Contract {
     name(overrides?: CallOverrides): Promise<[string]>;
 
     "name()"(overrides?: CallOverrides): Promise<[string]>;
+
+    nonblockingLzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "nonblockingLzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     nonces(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -740,6 +1028,22 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    retryMessage(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "retryMessage(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     rsvToSig(
       _a: BytesLike,
       _b: BytesLike,
@@ -753,6 +1057,68 @@ export class MQMTokenV1 extends Contract {
       _c: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    setConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setConfig(uint16,uint16,uint256,bytes)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setMinDstGasLookup(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setMinDstGasLookup(uint16,uint256,uint256)"(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setReceiveVersion(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setReceiveVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setSendVersion(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setSendVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -809,6 +1175,26 @@ export class MQMTokenV1 extends Contract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    trustAddress(
+      _otherContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "trustAddress(address)"(
+      _otherContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    trustedRemoteLookup(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "trustedRemoteLookup(uint16)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
   };
 
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
@@ -875,6 +1261,16 @@ export class MQMTokenV1 extends Contract {
     account: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  bridge(
+    _amount: BigNumberish,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "bridge(uint256)"(
+    _amount: BigNumberish,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   burn(
     amount: BigNumberish,
@@ -966,6 +1362,32 @@ export class MQMTokenV1 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  failedMessages(
+    arg0: BigNumberish,
+    arg1: BytesLike,
+    arg2: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "failedMessages(uint16,bytes,uint64)"(
+    arg0: BigNumberish,
+    arg1: BytesLike,
+    arg2: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  forceResumeReceive(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "forceResumeReceive(uint16,bytes)"(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   getBlacklist(overrides?: CallOverrides): Promise<string[]>;
 
   "getBlacklist()"(overrides?: CallOverrides): Promise<string[]>;
@@ -979,6 +1401,36 @@ export class MQMTokenV1 extends Contract {
   "getBurnBeforeBlockNumberDisabled()"(
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  getConfig(
+    _version: BigNumberish,
+    _chainId: BigNumberish,
+    arg2: string,
+    _configType: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "getConfig(uint16,uint16,address,uint256)"(
+    _version: BigNumberish,
+    _chainId: BigNumberish,
+    arg2: string,
+    _configType: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getDestChainId(overrides?: CallOverrides): Promise<number>;
+
+  "getDestChainId()"(overrides?: CallOverrides): Promise<number>;
+
+  getGasLimit(
+    _adapterParams: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "getGasLimit(bytes)"(
+    _adapterParams: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getIsTransferDisabled(overrides?: CallOverrides): Promise<boolean>;
 
@@ -1009,10 +1461,12 @@ export class MQMTokenV1 extends Contract {
   ): Promise<ContractTransaction>;
 
   initialize(
+    _lzEndpoint: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "initialize()"(
+  "initialize(address)"(
+    _lzEndpoint: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1033,12 +1487,56 @@ export class MQMTokenV1 extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  isTrustedRemote(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  "isTrustedRemote(uint16,bytes)"(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   isWhiteListed(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
   "isWhiteListed(address)"(
     _account: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  lzEndpoint(overrides?: CallOverrides): Promise<string>;
+
+  "lzEndpoint()"(overrides?: CallOverrides): Promise<string>;
+
+  lzReceive(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    _nonce: BigNumberish,
+    _payload: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "lzReceive(uint16,bytes,uint64,bytes)"(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    _nonce: BigNumberish,
+    _payload: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  minDstGasLookup(
+    arg0: BigNumberish,
+    arg1: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "minDstGasLookup(uint16,uint256)"(
+    arg0: BigNumberish,
+    arg1: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   mint(
     _amount: BigNumberish,
@@ -1053,6 +1551,22 @@ export class MQMTokenV1 extends Contract {
   name(overrides?: CallOverrides): Promise<string>;
 
   "name()"(overrides?: CallOverrides): Promise<string>;
+
+  nonblockingLzReceive(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    _nonce: BigNumberish,
+    _payload: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "nonblockingLzReceive(uint16,bytes,uint64,bytes)"(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    _nonce: BigNumberish,
+    _payload: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1109,6 +1623,22 @@ export class MQMTokenV1 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  retryMessage(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    _nonce: BigNumberish,
+    _payload: BytesLike,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "retryMessage(uint16,bytes,uint64,bytes)"(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    _nonce: BigNumberish,
+    _payload: BytesLike,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   rsvToSig(
     _a: BytesLike,
     _b: BytesLike,
@@ -1122,6 +1652,68 @@ export class MQMTokenV1 extends Contract {
     _c: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  setConfig(
+    _version: BigNumberish,
+    _chainId: BigNumberish,
+    _configType: BigNumberish,
+    _config: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setConfig(uint16,uint16,uint256,bytes)"(
+    _version: BigNumberish,
+    _chainId: BigNumberish,
+    _configType: BigNumberish,
+    _config: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMinDstGasLookup(
+    _dstChainId: BigNumberish,
+    _type: BigNumberish,
+    _dstGasAmount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setMinDstGasLookup(uint16,uint256,uint256)"(
+    _dstChainId: BigNumberish,
+    _type: BigNumberish,
+    _dstGasAmount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setReceiveVersion(
+    _version: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setReceiveVersion(uint16)"(
+    _version: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setSendVersion(
+    _version: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setSendVersion(uint16)"(
+    _version: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setTrustedRemote(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setTrustedRemote(uint16,bytes)"(
+    _srcChainId: BigNumberish,
+    _srcAddress: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -1178,6 +1770,26 @@ export class MQMTokenV1 extends Contract {
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  trustAddress(
+    _otherContract: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "trustAddress(address)"(
+    _otherContract: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  trustedRemoteLookup(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "trustedRemoteLookup(uint16)"(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   callStatic: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
@@ -1241,6 +1853,13 @@ export class MQMTokenV1 extends Contract {
       account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    bridge(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    "bridge(uint256)"(
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     burn(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -1322,6 +1941,32 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    failedMessages(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "failedMessages(uint16,bytes,uint64)"(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    forceResumeReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "forceResumeReceive(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getBlacklist(overrides?: CallOverrides): Promise<string[]>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<string[]>;
@@ -1337,6 +1982,36 @@ export class MQMTokenV1 extends Contract {
     "getBurnBeforeBlockNumberDisabled()"(
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    getConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "getConfig(uint16,uint16,address,uint256)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getDestChainId(overrides?: CallOverrides): Promise<number>;
+
+    "getDestChainId()"(overrides?: CallOverrides): Promise<number>;
+
+    getGasLimit(
+      _adapterParams: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getGasLimit(bytes)"(
+      _adapterParams: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getIsTransferDisabled(overrides?: CallOverrides): Promise<boolean>;
 
@@ -1366,9 +2041,12 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    initialize(overrides?: CallOverrides): Promise<void>;
+    initialize(_lzEndpoint: string, overrides?: CallOverrides): Promise<void>;
 
-    "initialize()"(overrides?: CallOverrides): Promise<void>;
+    "initialize(address)"(
+      _lzEndpoint: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     isBlacklisted(
       _account: string,
@@ -1390,6 +2068,18 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    isTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "isTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     isWhiteListed(
       _account: string,
       overrides?: CallOverrides
@@ -1399,6 +2089,38 @@ export class MQMTokenV1 extends Contract {
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    lzEndpoint(overrides?: CallOverrides): Promise<string>;
+
+    "lzEndpoint()"(overrides?: CallOverrides): Promise<string>;
+
+    lzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "lzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    minDstGasLookup(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "minDstGasLookup(uint16,uint256)"(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     mint(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -1410,6 +2132,22 @@ export class MQMTokenV1 extends Contract {
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
+
+    nonblockingLzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "nonblockingLzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1456,6 +2194,22 @@ export class MQMTokenV1 extends Contract {
 
     "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
 
+    retryMessage(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "retryMessage(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     rsvToSig(
       _a: BytesLike,
       _b: BytesLike,
@@ -1469,6 +2223,68 @@ export class MQMTokenV1 extends Contract {
       _c: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    setConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setConfig(uint16,uint16,uint256,bytes)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMinDstGasLookup(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setMinDstGasLookup(uint16,uint256,uint256)"(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setReceiveVersion(
+      _version: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setReceiveVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSendVersion(
+      _version: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setSendVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -1525,6 +2341,26 @@ export class MQMTokenV1 extends Contract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    trustAddress(
+      _otherContract: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "trustAddress(address)"(
+      _otherContract: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    trustedRemoteLookup(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "trustedRemoteLookup(uint16)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
   };
 
   filters: {
@@ -1557,6 +2393,21 @@ export class MQMTokenV1 extends Contract {
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
 
+    MessageFailed(
+      _srcChainId: null,
+      _srcAddress: null,
+      _nonce: null,
+      _payload: null
+    ): TypedEventFilter<
+      [number, string, BigNumber, string],
+      {
+        _srcChainId: number;
+        _srcAddress: string;
+        _nonce: BigNumber;
+        _payload: string;
+      }
+    >;
+
     OutBlacklisted(
       _account: string | null
     ): TypedEventFilter<[string], { _account: string }>;
@@ -1578,6 +2429,23 @@ export class MQMTokenV1 extends Contract {
     >;
 
     Paused(account: null): TypedEventFilter<[string], { account: string }>;
+
+    SetMinDstGasLookup(
+      _dstChainId: null,
+      _type: null,
+      _dstGasAmount: null
+    ): TypedEventFilter<
+      [number, BigNumber, BigNumber],
+      { _dstChainId: number; _type: BigNumber; _dstGasAmount: BigNumber }
+    >;
+
+    SetTrustedRemote(
+      _srcChainId: null,
+      _srcAddress: null
+    ): TypedEventFilter<
+      [number, string],
+      { _srcChainId: number; _srcAddress: string }
+    >;
 
     Transfer(
       from: string | null,
@@ -1673,6 +2541,16 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    bridge(
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "bridge(uint256)"(
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     burn(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1763,6 +2641,32 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    failedMessages(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "failedMessages(uint16,bytes,uint64)"(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    forceResumeReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "forceResumeReceive(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     getBlacklist(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1776,6 +2680,36 @@ export class MQMTokenV1 extends Contract {
     ): Promise<BigNumber>;
 
     "getBurnBeforeBlockNumberDisabled()"(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getConfig(uint16,uint16,address,uint256)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getDestChainId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getDestChainId()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getGasLimit(
+      _adapterParams: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getGasLimit(bytes)"(
+      _adapterParams: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1808,10 +2742,12 @@ export class MQMTokenV1 extends Contract {
     ): Promise<BigNumber>;
 
     initialize(
+      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "initialize()"(
+    "initialize(address)"(
+      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1835,6 +2771,18 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    isTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "isTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isWhiteListed(
       _account: string,
       overrides?: CallOverrides
@@ -1842,6 +2790,38 @@ export class MQMTokenV1 extends Contract {
 
     "isWhiteListed(address)"(
       _account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    lzEndpoint(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "lzEndpoint()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    lzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "lzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    minDstGasLookup(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "minDstGasLookup(uint16,uint256)"(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1858,6 +2838,22 @@ export class MQMTokenV1 extends Contract {
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nonblockingLzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "nonblockingLzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1914,6 +2910,22 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    retryMessage(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "retryMessage(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     rsvToSig(
       _a: BytesLike,
       _b: BytesLike,
@@ -1926,6 +2938,68 @@ export class MQMTokenV1 extends Contract {
       _b: BytesLike,
       _c: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    setConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setConfig(uint16,uint16,uint256,bytes)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMinDstGasLookup(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setMinDstGasLookup(uint16,uint256,uint256)"(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setReceiveVersion(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setReceiveVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setSendVersion(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setSendVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1982,6 +3056,26 @@ export class MQMTokenV1 extends Contract {
     "transferOwnership(address)"(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    trustAddress(
+      _otherContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "trustAddress(address)"(
+      _otherContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    trustedRemoteLookup(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "trustedRemoteLookup(uint16)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
@@ -2054,6 +3148,16 @@ export class MQMTokenV1 extends Contract {
     "balanceOf(address)"(
       account: string,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    bridge(
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "bridge(uint256)"(
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     burn(
@@ -2148,6 +3252,32 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    failedMessages(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "failedMessages(uint16,bytes,uint64)"(
+      arg0: BigNumberish,
+      arg1: BytesLike,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    forceResumeReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "forceResumeReceive(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     getBlacklist(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -2165,6 +3295,38 @@ export class MQMTokenV1 extends Contract {
     ): Promise<PopulatedTransaction>;
 
     "getBurnBeforeBlockNumberDisabled()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getConfig(uint16,uint16,address,uint256)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      arg2: string,
+      _configType: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getDestChainId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "getDestChainId()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getGasLimit(
+      _adapterParams: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getGasLimit(bytes)"(
+      _adapterParams: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2211,10 +3373,12 @@ export class MQMTokenV1 extends Contract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
+      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "initialize()"(
+    "initialize(address)"(
+      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2238,6 +3402,18 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    isTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "isTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     isWhiteListed(
       _account: string,
       overrides?: CallOverrides
@@ -2245,6 +3421,38 @@ export class MQMTokenV1 extends Contract {
 
     "isWhiteListed(address)"(
       _account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lzEndpoint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "lzEndpoint()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    lzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "lzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    minDstGasLookup(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "minDstGasLookup(uint16,uint256)"(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2261,6 +3469,22 @@ export class MQMTokenV1 extends Contract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nonblockingLzReceive(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "nonblockingLzReceive(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     nonces(
       owner: string,
@@ -2320,6 +3544,22 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    retryMessage(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "retryMessage(uint16,bytes,uint64,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      _nonce: BigNumberish,
+      _payload: BytesLike,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     rsvToSig(
       _a: BytesLike,
       _b: BytesLike,
@@ -2332,6 +3572,68 @@ export class MQMTokenV1 extends Contract {
       _b: BytesLike,
       _c: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setConfig(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setConfig(uint16,uint16,uint256,bytes)"(
+      _version: BigNumberish,
+      _chainId: BigNumberish,
+      _configType: BigNumberish,
+      _config: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMinDstGasLookup(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setMinDstGasLookup(uint16,uint256,uint256)"(
+      _dstChainId: BigNumberish,
+      _type: BigNumberish,
+      _dstGasAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setReceiveVersion(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setReceiveVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSendVersion(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setSendVersion(uint16)"(
+      _version: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setTrustedRemote(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setTrustedRemote(uint16,bytes)"(
+      _srcChainId: BigNumberish,
+      _srcAddress: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -2388,6 +3690,26 @@ export class MQMTokenV1 extends Contract {
     "transferOwnership(address)"(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    trustAddress(
+      _otherContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "trustAddress(address)"(
+      _otherContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    trustedRemoteLookup(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "trustedRemoteLookup(uint16)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }
