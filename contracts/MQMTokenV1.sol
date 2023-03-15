@@ -27,21 +27,14 @@ contract MQMTokenV1 is Math, Claimable, PausableUpgradeable, ERC20PermitUpgradea
 	using SafeERC20Upgradeable for IERC20Upgradeable;
 	// Constant Max Total Supply of MQM token
  	uint256 private constant _maxTotalSupply = 100_000_000 * (uint256(10) ** uint256(18));
-    uint16 destChainId;
 
-	function initialize(address _lzEndpoint) initializer() public {
+	function initialize() initializer() public {
 		__Ownable_init();
 		__ERC20_init_unchained('MetaQuantum', 'MQM');
 		__Pausable_init_unchained();
 		__ERC20Permit_init('MetaQuantum');
 		// Mint Total Supply
         mint(getMaxTotalSupply());
-        //LayerZero Optimism Goerli
-        //lzChainId:10132 lzEndpoint:0xae92d5aD7583AD66E49A0c67BAd18F6ba52dDDc1
-        if (_lzEndpoint == 0xae92d5aD7583AD66E49A0c67BAd18F6ba52dDDc1) destChainId = 10121;
-        //LayerZero Goerli
-        //lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-        if (_lzEndpoint == 0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23) destChainId = 10132;
 	}
 
 	/**
@@ -52,13 +45,7 @@ contract MQMTokenV1 is Math, Claimable, PausableUpgradeable, ERC20PermitUpgradea
 		return _maxTotalSupply;
 	}
 
-    /**
-     * @dev This Method permit getting Layer0 destChainId .
-     */
-	function getDestChainId() public view returns (uint16) {
-		return destChainId;
-	}
-
+ 
 	/**
      * @dev Implementation / Instance of TransferMany of Parsiq Token.
 	 * @dev This method permitr to habdle AirDrop process with a reduce cost of gas in at least 30%
@@ -182,13 +169,14 @@ contract MQMTokenV1 is Math, Claimable, PausableUpgradeable, ERC20PermitUpgradea
        _mint(toAddress, amount);
     }
 
-    function bridge(uint _amount) public payable {
+    function bridge(uint _amount, address _lzEndPoint, uint16 destChainId) public payable {
+        lzEndpoint = ILayerZeroEndpointUpgradeable(_lzEndPoint);
         _burn(msg.sender, _amount);
         bytes memory payload = abi.encode(msg.sender, _amount);
         _lzSend(destChainId, payload, payable(msg.sender), address(0x0), bytes(""));
     }
 
-    function trustAddress(address _otherContract) public onlyOwner {
+    function trustAddress(address _otherContract, uint16 destChainId) public onlyOwner {
         trustedRemoteLookup[destChainId] = abi.encodePacked(_otherContract, address(this));   
     }
 }

@@ -29,7 +29,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "bridge(uint256)": FunctionFragment;
+    "bridge(uint256,address,uint16)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "circulatingSupply()": FunctionFragment;
     "claimValues(address,address)": FunctionFragment;
@@ -46,14 +46,13 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "getBurnBeforeBlockNumber()": FunctionFragment;
     "getBurnBeforeBlockNumberDisabled()": FunctionFragment;
     "getConfig(uint16,uint16,address,uint256)": FunctionFragment;
-    "getDestChainId()": FunctionFragment;
     "getGasLimit(bytes)": FunctionFragment;
     "getIsTransferDisabled()": FunctionFragment;
     "getMaxTotalSupply()": FunctionFragment;
     "getMetaQuantumWallets()": FunctionFragment;
     "getWhiteListWallets()": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(address)": FunctionFragment;
+    "initialize()": FunctionFragment;
     "isBlacklisted(address)": FunctionFragment;
     "isMetaQuantumWallet(address)": FunctionFragment;
     "isTrustedRemote(uint16,bytes)": FunctionFragment;
@@ -83,7 +82,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferMany(address[],uint256[])": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "trustAddress(address)": FunctionFragment;
+    "trustAddress(address,uint16)": FunctionFragment;
     "trustedRemoteLookup(uint16)": FunctionFragment;
   };
 
@@ -114,7 +113,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "bridge",
-    values: [BigNumberish]
+    values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(
@@ -175,10 +174,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getDestChainId",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "getGasLimit",
     values: [BytesLike]
   ): string;
@@ -202,7 +197,10 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "increaseAllowance",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "isBlacklisted",
     values: [string]
@@ -308,7 +306,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "trustAddress",
-    values: [string]
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "trustedRemoteLookup",
@@ -390,10 +388,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getConfig", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getDestChainId",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getGasLimit",
     data: BytesLike
@@ -655,11 +649,15 @@ export class MQMTokenV1 extends Contract {
 
     bridge(
       _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "bridge(uint256)"(
+    "bridge(uint256,address,uint16)"(
       _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -817,10 +815,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getDestChainId(overrides?: CallOverrides): Promise<[number]>;
-
-    "getDestChainId()"(overrides?: CallOverrides): Promise<[number]>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -860,12 +854,10 @@ export class MQMTokenV1 extends Contract {
     ): Promise<ContractTransaction>;
 
     initialize(
-      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "initialize(address)"(
-      _lzEndpoint: string,
+    "initialize()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1178,11 +1170,13 @@ export class MQMTokenV1 extends Contract {
 
     trustAddress(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "trustAddress(address)"(
+    "trustAddress(address,uint16)"(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1264,11 +1258,15 @@ export class MQMTokenV1 extends Contract {
 
   bridge(
     _amount: BigNumberish,
+    _lzEndPoint: string,
+    destChainId: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "bridge(uint256)"(
+  "bridge(uint256,address,uint16)"(
     _amount: BigNumberish,
+    _lzEndPoint: string,
+    destChainId: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1418,10 +1416,6 @@ export class MQMTokenV1 extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getDestChainId(overrides?: CallOverrides): Promise<number>;
-
-  "getDestChainId()"(overrides?: CallOverrides): Promise<number>;
-
   getGasLimit(
     _adapterParams: BytesLike,
     overrides?: CallOverrides
@@ -1461,12 +1455,10 @@ export class MQMTokenV1 extends Contract {
   ): Promise<ContractTransaction>;
 
   initialize(
-    _lzEndpoint: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "initialize(address)"(
-    _lzEndpoint: string,
+  "initialize()"(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1773,11 +1765,13 @@ export class MQMTokenV1 extends Contract {
 
   trustAddress(
     _otherContract: string,
+    destChainId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "trustAddress(address)"(
+  "trustAddress(address,uint16)"(
     _otherContract: string,
+    destChainId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1854,10 +1848,17 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    bridge(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    "bridge(uint256)"(
+    bridge(
       _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "bridge(uint256,address,uint16)"(
+      _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1999,10 +2000,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getDestChainId(overrides?: CallOverrides): Promise<number>;
-
-    "getDestChainId()"(overrides?: CallOverrides): Promise<number>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -2041,12 +2038,9 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    initialize(_lzEndpoint: string, overrides?: CallOverrides): Promise<void>;
+    initialize(overrides?: CallOverrides): Promise<void>;
 
-    "initialize(address)"(
-      _lzEndpoint: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    "initialize()"(overrides?: CallOverrides): Promise<void>;
 
     isBlacklisted(
       _account: string,
@@ -2344,11 +2338,13 @@ export class MQMTokenV1 extends Contract {
 
     trustAddress(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "trustAddress(address)"(
+    "trustAddress(address,uint16)"(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2543,11 +2539,15 @@ export class MQMTokenV1 extends Contract {
 
     bridge(
       _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "bridge(uint256)"(
+    "bridge(uint256,address,uint16)"(
       _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2699,10 +2699,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getDestChainId(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getDestChainId()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -2742,12 +2738,10 @@ export class MQMTokenV1 extends Contract {
     ): Promise<BigNumber>;
 
     initialize(
-      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "initialize(address)"(
-      _lzEndpoint: string,
+    "initialize()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -3060,11 +3054,13 @@ export class MQMTokenV1 extends Contract {
 
     trustAddress(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "trustAddress(address)"(
+    "trustAddress(address,uint16)"(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -3152,11 +3148,15 @@ export class MQMTokenV1 extends Contract {
 
     bridge(
       _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "bridge(uint256)"(
+    "bridge(uint256,address,uint16)"(
       _amount: BigNumberish,
+      _lzEndPoint: string,
+      destChainId: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3314,12 +3314,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getDestChainId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "getDestChainId()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -3373,12 +3367,10 @@ export class MQMTokenV1 extends Contract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      _lzEndpoint: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "initialize(address)"(
-      _lzEndpoint: string,
+    "initialize()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3694,11 +3686,13 @@ export class MQMTokenV1 extends Contract {
 
     trustAddress(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "trustAddress(address)"(
+    "trustAddress(address,uint16)"(
       _otherContract: string,
+      destChainId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

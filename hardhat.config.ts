@@ -32,6 +32,7 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 			chainId: 1,
 			url: process.env.URL_MAINNET_ETH,
 			gasPrice: 65000000000,
+			timeout: 100000,
 			accounts: {
 				mnemonic:process.env.MNEMONIC
 			}
@@ -40,6 +41,7 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 			chainId: 5,
 			url: process.env.URL_TESTNET_ETH,
 			gasPrice: 65000000000,
+			timeout: 100000,
 			accounts: {
 				mnemonic:process.env.MNEMONIC,
 				count:parseInt(`${process.env.ACCOUNTS}`)
@@ -49,6 +51,7 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 			chainId: 137,
 			url:process.env.URL_MAINNET_POLYGON,
 			gasPrice: 65000000000,
+			timeout: 100000,
 			accounts: {
 				mnemonic:process.env.MNEMONIC,
 				count:parseInt(`${process.env.ACCOUNTS}`)
@@ -58,6 +61,7 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 			chainId: 80001,
 			url:process.env.URL_TESTNET_POLYGON,
 			gasPrice: 65000000000,
+			timeout: 100000,
 			accounts: {
 				mnemonic:process.env.MNEMONIC,
 				count:parseInt(`${process.env.ACCOUNTS}`)
@@ -67,14 +71,16 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 			chainId: 56,
 			url: process.env.URL_MAINNET_BSC,
 			gasPrice: 20000000000,
+			timeout: 100000,
 			accounts: {
 				mnemonic:process.env.MNEMONIC
 			}
 		},
 		bsc_testnet: {
-			chainId: 97,
+			chainId: 0x61,
 			url: process.env.URL_TESTNET_BSC,
 			gasPrice: 20000000000,
+			timeout: 100000,
 			accounts: {
 				mnemonic:process.env.MNEMONIC,
 				count:parseInt(`${process.env.ACCOUNTS}`)
@@ -129,8 +135,31 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 		// Your API key for Etherscan
 		// Obtain one at https://etherscan.io/
 		//apiKey: process.env.ETHERSCAN_API_KEY
-		//apiKey: process.env.BSCSCAN_API_KEY
-		apiKey: process.env.POLYGON_API_KEY
+		apiKey: process.env.BSCSCAN_API_KEY
+		//apiKey: process.env.POLYGON_API_KEY
+		// apiKey: {
+		// 	polygonMumbai: process.env.POLYGON_API_KEY,
+		// 	goerli: process.env.ETHERSCAN_API_KEY
+		//   }
+		  //,
+		  //customChains: [
+			// {
+			//   network: "goerli",
+			//   chainId: 5,
+			//   urls: {
+			// 	apiURL: "https://api-goerli.etherscan.io/api",
+			// 	browserURL: "https://goerli.etherscan.io"
+			//   }
+			// },
+		// 	{
+		// 		network: "polygonMumbai",
+		// 		chainId: 80001,
+		// 		urls: {
+		// 		  apiURL: "https://api-testnet.polygonscan.com",
+		// 		  browserURL: "https://mumbai.polygonscan.com"
+		// 		}
+		// 	  }
+		//   ]
 	},
 	spdxLicenseIdentifier: {
 		overwrite: true,

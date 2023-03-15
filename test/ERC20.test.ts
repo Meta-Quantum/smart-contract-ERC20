@@ -26,14 +26,12 @@ describe("ERC20 Full Test", async () => {
 
 	it("1. Should return the Total Supply, Balance of the Owner, Name, Symbol and Decimals", async () => {
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken);
 
 		await metaquantumtoken.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
 		expect((await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString()).to.be.equal('100000000000000000000000000');
@@ -64,15 +62,13 @@ describe("ERC20 Full Test", async () => {
 
 	it("2. Should be Setting and Getting the OwnerShip of the Smart Contract", async () => {
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});;
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken)
 		
 
 		await metaquantumtoken.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		 
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
 		expect((await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString()).to.be.equal('100000000000000000000000000');
@@ -107,14 +103,12 @@ describe("ERC20 Full Test", async () => {
 
 	it("3. Should the right value for Balance Of, Transfer, Transfer From, and Approve, etc", async () => {
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});;
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken)
 
 		await metaquantumtoken.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		 
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
 		expect((await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString()).to.be.equal('100000000000000000000000000');
@@ -210,14 +204,14 @@ describe("ERC20 Full Test", async () => {
 
 	it("4. Should the right value for add, drop or revert when i try to execute a transfer", async () => {
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});;
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken)
 
 		await metaquantumtoken.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		
+		 
+		 
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
 		expect((await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString()).to.be.equal('100000000000000000000000000');
@@ -345,14 +339,14 @@ describe("ERC20 Full Test", async () => {
 
 	it("5. Should the right value of the Circulating Supply for add, drop any wallets in the Array for MQM Wallets", async () => {
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});;
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken)
 
 		await metaquantumtoken.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		
+		 
+		 
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
 		expect((await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString()).to.be.equal('100000000000000000000000000');
@@ -472,16 +466,16 @@ describe("ERC20 Full Test", async () => {
 	it("6. Should the right value of the Claim wallets in the Array for MQM Wallets", async () => {
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
 		const Erc20Token = await ethers.getContractFactory("ERC20Token");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});;
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken)
 		const erc20Token = await upgrades.deployProxy(Erc20Token);
 
 		await metaquantumtoken.deployed();
 		await erc20Token.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		
+		 
+		 
 		console.log("ERC20 Token deployed to:", erc20Token.address);
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
@@ -533,16 +527,16 @@ describe("ERC20 Full Test", async () => {
 
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
 		const Erc20Token = await ethers.getContractFactory("ERC20Token");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});;
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken)
 		const erc20Token = await upgrades.deployProxy(Erc20Token);
 
 		await metaquantumtoken.deployed();
 		await erc20Token.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		
+		 
+		 
 		console.log("ERC20 Token deployed to:", erc20Token.address);
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
@@ -697,16 +691,16 @@ describe("ERC20 Full Test", async () => {
 
 		const MetaQuantumToken = await ethers.getContractFactory("MQMTokenV1");
 		const Erc20Token = await ethers.getContractFactory("ERC20Token");
-		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken,{initializer: false});;
+		const metaquantumtoken = await upgrades.deployProxy(MetaQuantumToken)
 		const erc20Token = await upgrades.deployProxy(Erc20Token);
 
 		await metaquantumtoken.deployed();
 		await erc20Token.deployed();
 		// verify the Address
 		console.log("MQM Token deployed to:", metaquantumtoken.address);
-		//LayerZero Goerli
-		//lzChainId:10121 lzEndpoint:0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23
-		metaquantumtoken.initialize('0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23');
+		
+		 
+		 
 		console.log("ERC20 Token deployed to:", erc20Token.address);
 		// Verify the balance of the Owner
 		console.log("Balance of the Owner: ", (await metaquantumtoken.balanceOf(await accounts[0].getAddress())).toString(), "must be 100 million!!! in wei");
