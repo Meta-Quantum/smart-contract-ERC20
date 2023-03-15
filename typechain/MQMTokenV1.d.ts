@@ -40,6 +40,7 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "dropBlacklist(address)": FunctionFragment;
     "dropMetaQuantumWallet(address)": FunctionFragment;
     "dropWhiteListed(address)": FunctionFragment;
+    "estimateFees(address,uint16,address,bytes,bool,bytes)": FunctionFragment;
     "failedMessages(uint16,bytes,uint64)": FunctionFragment;
     "forceResumeReceive(uint16,bytes)": FunctionFragment;
     "getBlacklist()": FunctionFragment;
@@ -148,6 +149,10 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "dropWhiteListed",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "estimateFees",
+    values: [string, BigNumberish, string, BytesLike, boolean, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "failedMessages",
@@ -365,6 +370,10 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "dropWhiteListed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "estimateFees",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -754,6 +763,30 @@ export class MQMTokenV1 extends Contract {
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    estimateFees(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { nativeFee: BigNumber; zroFee: BigNumber }
+    >;
+
+    "estimateFees(address,uint16,address,bytes,bool,bytes)"(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { nativeFee: BigNumber; zroFee: BigNumber }
+    >;
 
     failedMessages(
       arg0: BigNumberish,
@@ -1360,6 +1393,30 @@ export class MQMTokenV1 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  estimateFees(
+    _lzEndPoint: string,
+    _dstChainId: BigNumberish,
+    _userApplication: string,
+    _payload: BytesLike,
+    _payInZRO: boolean,
+    _adapterParam: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & { nativeFee: BigNumber; zroFee: BigNumber }
+  >;
+
+  "estimateFees(address,uint16,address,bytes,bool,bytes)"(
+    _lzEndPoint: string,
+    _dstChainId: BigNumberish,
+    _userApplication: string,
+    _payload: BytesLike,
+    _payInZRO: boolean,
+    _adapterParam: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & { nativeFee: BigNumber; zroFee: BigNumber }
+  >;
+
   failedMessages(
     arg0: BigNumberish,
     arg1: BytesLike,
@@ -1941,6 +1998,30 @@ export class MQMTokenV1 extends Contract {
       _account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    estimateFees(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { nativeFee: BigNumber; zroFee: BigNumber }
+    >;
+
+    "estimateFees(address,uint16,address,bytes,bool,bytes)"(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { nativeFee: BigNumber; zroFee: BigNumber }
+    >;
 
     failedMessages(
       arg0: BigNumberish,
@@ -2641,6 +2722,26 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    estimateFees(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "estimateFees(address,uint16,address,bytes,bool,bytes)"(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     failedMessages(
       arg0: BigNumberish,
       arg1: BytesLike,
@@ -3250,6 +3351,26 @@ export class MQMTokenV1 extends Contract {
     "dropWhiteListed(address)"(
       _account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    estimateFees(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "estimateFees(address,uint16,address,bytes,bool,bytes)"(
+      _lzEndPoint: string,
+      _dstChainId: BigNumberish,
+      _userApplication: string,
+      _payload: BytesLike,
+      _payInZRO: boolean,
+      _adapterParam: BytesLike,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     failedMessages(

@@ -176,6 +176,10 @@ contract MQMTokenV1 is Math, Claimable, PausableUpgradeable, ERC20PermitUpgradea
         _lzSend(destChainId, payload, payable(msg.sender), address(0x0), bytes(""));
     }
 
+     function estimateFees(address _lzEndPoint, uint16 _dstChainId, address _userApplication, bytes calldata _payload, bool _payInZRO, bytes calldata _adapterParam)  public view returns (uint nativeFee, uint zroFee){     
+         ( nativeFee,  zroFee) = ILayerZeroEndpointUpgradeable(_lzEndPoint).estimateFees(_dstChainId, _userApplication, _payload, _payInZRO, _adapterParam);
+     }
+
     function trustAddress(address _otherContract, uint16 destChainId) public onlyOwner {
         trustedRemoteLookup[destChainId] = abi.encodePacked(_otherContract, address(this));   
     }
