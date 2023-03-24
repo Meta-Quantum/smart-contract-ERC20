@@ -20,6 +20,7 @@ export type { ILayerZeroReceiverUpgradeable } from "./ILayerZeroReceiverUpgradea
 export type { ILayerZeroUserApplicationConfigUpgradeable } from "./ILayerZeroUserApplicationConfigUpgradeable";
 export type { LzAppUpgradeable } from "./LzAppUpgradeable";
 export type { NonblockingLzAppUpgradeable } from "./NonblockingLzAppUpgradeable";
+export type { Vesting } from "./Vesting";
 
 export { ERC20Token__factory } from "./factories/ERC20Token__factory";
 export { MQMTokenV1__factory } from "./factories/MQMTokenV1__factory";
@@ -40,3 +41,4 @@ export { ILayerZeroReceiverUpgradeable__factory } from "./factories/ILayerZeroRe
 export { ILayerZeroUserApplicationConfigUpgradeable__factory } from "./factories/ILayerZeroUserApplicationConfigUpgradeable__factory";
 export { LzAppUpgradeable__factory } from "./factories/LzAppUpgradeable__factory";
 export { NonblockingLzAppUpgradeable__factory } from "./factories/NonblockingLzAppUpgradeable__factory";
+export { Vesting__factory } from "./factories/Vesting__factory";
