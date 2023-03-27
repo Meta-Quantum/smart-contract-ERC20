@@ -29,7 +29,6 @@ struct VestingType {
     uint256 initialRate;
     uint256 afterDays;
 	uint256 monthRate;
-	uint256 monthDelay;
 	bool vesting;
 	bool vestingType; //true for daily rate and false for monthly rate
 }
@@ -44,8 +43,12 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 	// Mapping of FrozenWallet
 	// Address Wallets -> Struc FrozenWallet
 	mapping (address => FrozenWallet) public frozenWallets;
+
+	uint256 private totalAmountVesting;
 	// Array of Struc Vesting Types
     VestingType[] public vestingTypes;
+
+	ERC20Upgradeable public token;
 
 	// Event
 	event inFrozenWallet(
@@ -89,7 +92,9 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 			total = total.add(totalAmounts[i]);
 		}
 
-	    _balances[msg.sender] = _balances[msg.sender].sub(total, "ERC20: transfer amount exceeds balance");
+	    //_balances[msg.sender] = _balances[msg.sender].sub(total, "ERC20: transfer amount exceeds balance");
+		   require(token.balanceOf(address(this)) >= total,"ERC20: transfer amount exceeds balance");
+
 
         for(uint256 j = 0; j < addressesLength; j++) {
             address _address = addresses[j];
@@ -103,30 +108,25 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 				monthlyAmount = 0;
 				 afterDay = vestingType.afterDays;
 			} else {
-				// WE FIXED PUBLIC ALLOCATION TO 50% MONTHLY AS PER MQM WHITE PAPER.
 				dailyAmount = 0;
-				monthlyAmount = mulDiv(totalAmounts[j], 500000000000000000, 1e18);
-				afterDay = vestingType.monthDelay.mul(30 days);
+				//monthlyAmount = mulDiv(totalAmounts[j], 500000000000000000, 1e18);
+				//afterDay = vestingType.monthDelay.mul(30 days);
+				monthlyAmount =  mulDiv(totalAmounts[j], vestingType.monthRate, 1e18);
+				afterDay = vestingType.afterDays;
 			}
-			/**
-			* @dev The Allocation #4, VestingTypeIndex #3, correspond the Public Allocation
-			* @dev which will be managed by an IDO, within the ApolloX Platform, in the Binance Smart Chain
-			* @dev Therefore, 34% of said allocation, which is the first part to be delivered during the IDO,
-			* @dev will be previously transferred to ApolloX to be delivered to the Stakeholders participating
-			* @dev in the IDO prior to the vesting process as such.
-			* @dev the remaining 66 percent will be delivered in two stages of 33% every 30 days, completing 100% in two months.
-			*/
+			
 			if (vestingTypeIndex == 3) {
 				initialAmount = 0;
 			} else {
 				initialAmount = mulDiv(totalAmounts[j], vestingType.initialRate, 1e18);
 			}
 			// Transfer Token to the Wallet
-            _balances[_address] = _balances[_address].add(totalAmount);
-            emit Transfer(msg.sender, _address, totalAmount);
+            //_balances[_address] = _balances[_address].add(totalAmount);
+			//emit Transfer(msg.sender, _address, totalAmount);
 
 			// Frozen Wallet
             addFrozenWallet(_address, totalAmount, dailyAmount, monthlyAmount, initialAmount, afterDay);
+			totalAmountVesting = totalAmountVesting + totalAmount;
         }
 
         return true;
@@ -260,4 +260,17 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
         uint256 transferableAmount = getTransferableAmount(sender);
         restAmount = frozenWallets[sender].totalAmount.sub(transferableAmount);
     }
+
+	function getToken() external view returns (address){
+        return address(token);
+    }
+
+    function getWithdrawContractAmount()  external view returns (uint256){
+		return token.balanceOf(address(this));
+    }
+
+    function getWithdrawContractAmountSubFrozenWalletAllocation()  external view returns (uint256){
+		return token.balanceOf(address(this)) - totalAmountVesting;
+    }
+
 }
