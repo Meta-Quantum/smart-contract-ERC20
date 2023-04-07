@@ -6,16 +6,14 @@
 pragma solidity 0.8.4;
 pragma experimental ABIEncoderV2;
 
-import "../lib/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "../lib/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../lib/main/lzApp/NonblockingLzAppUpgradeable.sol";
 import "../lib/main/Vesting.sol";
 
 
 
-contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ERC20PermitUpgradeable, NonblockingLzAppUpgradeable{
+contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20PermitUpgradeable, NonblockingLzAppUpgradeable{
 	using AddressUpgradeable for address;
-	using SafeMathUpgradeable for uint256;
 	using SafeERC20Upgradeable for IERC20Upgradeable;
 	// Constant Max Total Supply of MQM token
  	uint256 private constant _maxTotalSupply = 100_000_000 * (uint256(10) ** uint256(18));
@@ -56,16 +54,20 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
 			require(recipient != address(0), "ERC20: transfer to the zero address");
 			require(!isBlacklisted(recipient), "ERC20 MQM: recipient account is blacklisted");
 			require(amounts[i] != 0, "ERC20 MQM: total amount token is zero");
-            total = total.add(amounts[i]);
+            total += amounts[i];
         }
 
-	    _balances[msg.sender] = _balances[msg.sender].sub(total, "ERC20: transfer amount exceeds balance");
+        if(total > _balances[msg.sender]){
+            revert(); //"ERC20: transfer amount exceeds balance"
+        }
+
+	    _balances[msg.sender] -= total;
 
         for (uint256 i = 0; i < recipients.length; i++) {
             address recipient = recipients[i];
             uint256 amount = amounts[i];
 
-            _balances[recipient] = _balances[recipient].add(amount);
+            _balances[recipient] += amount;
             emit Transfer(msg.sender, recipient, amount);
         }
     }
@@ -75,7 +77,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
      */
 	function circulatingSupply() public view returns (uint256 result) {
 		uint256 index = metaquantum_wallets.length;
-		result = totalSupply().sub(balanceOf(owner()));
+		result = totalSupply() - balanceOf(owner());
 		for (uint256 i=0; i < index ; i++ ) {
 			if ((metaquantum_wallets[i] != address(0)) && (result != 0)) {
 				result -= balanceOf(metaquantum_wallets[i]);
@@ -173,7 +175,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
 		 * - After upgrade the SmartContract and Eliminate this method
      */
     function mint( uint256 _amount) public onlyOwner() {
-		require(getMaxTotalSupply() >= totalSupply().add(_amount), "ERC20: Can't Mint, it exceeds the maximum supply ");
+		require(getMaxTotalSupply() >= (totalSupply()+_amount), "ERC20: Can't Mint, it exceeds the maximum supply ");
         _mint(owner(), _amount);
     }
 
