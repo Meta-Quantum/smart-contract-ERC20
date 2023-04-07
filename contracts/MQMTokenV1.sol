@@ -60,7 +60,8 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
         }
 
         uint256 total = 0;
-        for (uint256 i = 0; i < amounts.length; i++) {
+        uint256 amountsNb = amounts.length;
+        for (uint256 i = 0; i < amountsNb;) {
 			address recipient = recipients[i];
             if(recipient == address(0)){
                 revert TranferToZeroAddress();
@@ -72,6 +73,10 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
                 revert ZeroAmount();
             }
             total += amounts[i];
+
+            unchecked {
+                ++i;
+            }
         }
 
         if(total > _balances[msg.sender]){
@@ -80,12 +85,17 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
 
 	    _balances[msg.sender] -= total;
 
-        for (uint256 i = 0; i < recipients.length; i++) {
+        uint256 recipientsNb = recipients.length;
+        for (uint256 i = 0; i < recipientsNb;) {
             address recipient = recipients[i];
             uint256 amount = amounts[i];
 
             _balances[recipient] += amount;
             emit Transfer(msg.sender, recipient, amount);
+
+            unchecked {
+                ++i;
+            }
         }
     }
 
@@ -95,10 +105,14 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
 	function circulatingSupply() public view returns (uint256 result) {
 		uint256 index = metaquantum_wallets.length;
 		result = totalSupply() - balanceOf(owner());
-		for (uint256 i=0; i < index ; i++ ) {
+		for (uint256 i=0; i < index ;) {
 			if ((metaquantum_wallets[i] != address(0)) && (result != 0)) {
 				result -= balanceOf(metaquantum_wallets[i]);
 			}
+
+            unchecked {
+                ++i;
+            }
 		}
 	}
 
