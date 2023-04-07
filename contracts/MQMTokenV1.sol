@@ -25,7 +25,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
     error MaximumSupplyOverflow();
 
 	// Constant Max Total Supply of MQM token
- 	uint256 private constant _maxTotalSupply = 100_000_000 * (uint256(10) ** uint256(18));
+ 	uint256 private constant _maxTotalSupply = 100_000_000_000_000_000_000_000_000;
 
 	function initialize() initializer() public {
 		__Ownable_init();
