@@ -6,13 +6,11 @@
 pragma solidity 0.8.4;
 pragma experimental ABIEncoderV2;
 
-import "../lib/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "../lib/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../lib/main/Vesting.sol";
 import "../lib/main/Math.sol";
 
 contract MQMVesting is Vesting {
-using SafeMathUpgradeable for uint256;
 
 //Deposit is not possible anymore because the deposito period over
 error DepositPeriodOver();
@@ -72,7 +70,7 @@ function initialize(address token_) initializer() public  {
         FrozenWallet memory frozenWallet = frozenWallets[msg.sender];
         uint256 releaseTime = getReleaseTime();
         
-        if(block.timestamp > releaseTime && block.timestamp < releaseTime.add(frozenWallet.afterDays)){
+        if(block.timestamp > releaseTime && block.timestamp < releaseTime + frozenWallet.afterDays){
             revert LockPeriodOngoing();
         }
 
