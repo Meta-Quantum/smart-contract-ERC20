@@ -15,6 +15,15 @@ import "../lib/main/Vesting.sol";
 contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20PermitUpgradeable, NonblockingLzAppUpgradeable{
 	using AddressUpgradeable for address;
 	using SafeERC20Upgradeable for IERC20Upgradeable;
+
+    error WrongArrayLength();
+    error TranferToZeroAddress();
+    error RecipientIsBlacklisted();
+    error ZeroAmount();
+    error AmountExceedsBalance();
+    error TokenActionWhilePaused();
+    error MaximumSupplyOverflow();
+
 	// Constant Max Total Supply of MQM token
  	uint256 private constant _maxTotalSupply = 100_000_000 * (uint256(10) ** uint256(18));
 
@@ -46,19 +55,27 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
 
 	function transferMany(address[] calldata recipients, uint256[] calldata amounts) external onlyOwner() whenNotPaused()
     {
-        require(recipients.length == amounts.length, "ERC20 MQM: Wrong array length");
+        if(recipients.length != amounts.length){
+            revert WrongArrayLength();
+        }
 
         uint256 total = 0;
         for (uint256 i = 0; i < amounts.length; i++) {
 			address recipient = recipients[i];
-			require(recipient != address(0), "ERC20: transfer to the zero address");
-			require(!isBlacklisted(recipient), "ERC20 MQM: recipient account is blacklisted");
-			require(amounts[i] != 0, "ERC20 MQM: total amount token is zero");
+            if(recipient == address(0)){
+                revert TranferToZeroAddress();
+            }
+            if(isBlacklisted(recipient)){
+                revert RecipientIsBlacklisted();
+            }
+            if(amounts[i] == 0){
+                revert ZeroAmount();
+            }
             total += amounts[i];
         }
 
         if(total > _balances[msg.sender]){
-            revert(); //"ERC20: transfer amount exceeds balance"
+            revert AmountExceedsBalance();
         }
 
 	    _balances[msg.sender] -= total;
@@ -136,11 +153,10 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
      * @param amount Amount token to transfer/transferFrom/mint/burn
      * See {ERC20 Upgradeable}.
      */
-	function _beforeTokenTransfer(address sender, address recipient, uint256 amount) internal virtual override notBlacklisted(sender) {
-		require(!isBlacklisted(recipient), "ERC20 MQM: recipient account is blacklisted");
+	function _beforeTokenTransfer(address sender, address recipient, uint256 amount) internal virtual override notBlacklisted(sender) notBlacklisted(recipient) {
 		// Permit the Owner execute token transfer/mint/burn while paused contract
-		if (_msgSender() != owner()) {
-			require(!paused(), "ERC20 MQM: token transfer/mint/burn while paused");
+		if (_msgSender() != owner() && paused()) {
+            revert TokenActionWhilePaused();
 		}
         super._beforeTokenTransfer(sender, recipient, amount);
     }
@@ -175,7 +191,9 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
 		 * - After upgrade the SmartContract and Eliminate this method
      */
     function mint( uint256 _amount) public onlyOwner() {
-		require(getMaxTotalSupply() >= (totalSupply()+_amount), "ERC20: Can't Mint, it exceeds the maximum supply ");
+        if(getMaxTotalSupply() < (totalSupply()+_amount)){
+            revert MaximumSupplyOverflow();
+        }
         _mint(owner(), _amount);
     }
 
