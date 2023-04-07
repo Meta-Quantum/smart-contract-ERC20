@@ -8,7 +8,6 @@ pragma experimental ABIEncoderV2;
 
 import "../lib/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../lib/main/Vesting.sol";
-import "../lib/main/Math.sol";
 
 contract MQMVesting is Vesting {
 
@@ -50,7 +49,7 @@ function initialize(address token_) initializer() public  {
         token = ERC20Upgradeable(token_);
     }
 
-    function deposit(uint256 amount) public onlyOwner {
+    function deposit(uint256 amount) public payable onlyOwner {
         uint256 releaseTime = getReleaseTime();
         if(block.timestamp > releaseTime){
             revert DepositPeriodOver();
