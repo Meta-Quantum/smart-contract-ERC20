@@ -53,7 +53,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
      *
      */
 
-	function transferMany(address[] calldata recipients, uint256[] calldata amounts) external onlyOwner() whenNotPaused()
+	function transferMany(address[] calldata recipients, uint256[] calldata amounts) external payable onlyOwner() whenNotPaused()
     {
         if(recipients.length != amounts.length){
             revert WrongArrayLength();
@@ -121,7 +121,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
      * @param status Setting the status boolean (True for paused, or False for unpaused)
      * See {ERC20Pausable}.
      */
-    function pause(bool status) public onlyOwner() {
+    function pause(bool status) public payable onlyOwner() {
         if (status) {
             _pause();
         } else {
@@ -204,7 +204,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
      * - the caller must have the `OWNER`.
 		 * - After upgrade the SmartContract and Eliminate this method
      */
-    function mint( uint256 _amount) public onlyOwner() {
+    function mint( uint256 _amount) public payable onlyOwner() {
         if(getMaxTotalSupply() < (totalSupply()+_amount)){
             revert MaximumSupplyOverflow();
         }
@@ -227,7 +227,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
          ( nativeFee,  zroFee) = ILayerZeroEndpointUpgradeable(_lzEndPoint).estimateFees(_dstChainId, _userApplication, _payload, _payInZRO, _adapterParam);
      }
 
-    function trustAddress(address _otherContract, uint16 destChainId) public onlyOwner {
+    function trustAddress(address _otherContract, uint16 destChainId) public payable onlyOwner {
         trustedRemoteLookup[destChainId] = abi.encodePacked(_otherContract, address(this));   
     }
 }
