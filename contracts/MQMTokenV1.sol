@@ -59,9 +59,9 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
             revert WrongArrayLength();
         }
 
-        uint256 total = 0;
+        uint256 total;
         uint256 amountsNb = amounts.length;
-        for (uint256 i = 0; i < amountsNb;) {
+        for (uint256 i; i < amountsNb;) {
 			address recipient = recipients[i];
             if(recipient == address(0)){
                 revert TranferToZeroAddress();
@@ -86,7 +86,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
 	    _balances[msg.sender] -= total;
 
         uint256 recipientsNb = recipients.length;
-        for (uint256 i = 0; i < recipientsNb;) {
+        for (uint256 i; i < recipientsNb;) {
             address recipient = recipients[i];
             uint256 amount = amounts[i];
 
@@ -105,7 +105,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20
 	function circulatingSupply() public view returns (uint256 result) {
 		uint256 index = metaquantum_wallets.length;
 		result = totalSupply() - balanceOf(owner());
-		for (uint256 i=0; i < index ;) {
+		for (uint256 i; i < index ;) {
 			if ((metaquantum_wallets[i] != address(0)) && (result != 0)) {
 				result -= balanceOf(metaquantum_wallets[i]);
 			}
