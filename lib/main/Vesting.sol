@@ -86,21 +86,25 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 		if(!vestingType.vesting) revert VestingTypeNotFound();
 
         uint256 addressesLength = addresses.length;
-		uint256 total = 0;
+		uint256 total;
 
-		for(uint256 i = 0; i < addressesLength; i++) {
+		for(uint256 i; i < addressesLength;) {
 			address _address = addresses[i];
 			if(_address == address(0)) revert TransferToZeroAddress();
 			if(isBlacklisted(_address)) revert BlacklistedAddress();
 			if(totalAmounts[i] == 0) revert ZeroAmount();
 			total += totalAmounts[i];
+
+			unchecked {
+				++i;
+			}
 		}
 
 	    //_balances[msg.sender] = _balances[msg.sender].sub(total, "ERC20: transfer amount exceeds balance");
 		if(token.balanceOf(address(this)) < total) revert TransferAmountExceedsBalance();
 
 
-        for(uint256 j = 0; j < addressesLength; j++) {
+        for(uint256 j; j < addressesLength;) {
             address _address = addresses[j];
             uint256 totalAmount = totalAmounts[j];
 			uint256 dailyAmount;
@@ -109,19 +113,17 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 			uint256 initialAmount;
 			if (vestingType.vestingType) {
 				dailyAmount = mulDiv(totalAmounts[j], vestingType.dailyRate, 1e18);
-				monthlyAmount = 0;
+				//monthlyAmount = 0; Not usefull if you create the variables inside the loop
 				 afterDay = vestingType.afterDays;
 			} else {
-				dailyAmount = 0;
+				//dailyAmount = 0; Not usefull if you create the variables inside the loop
 				//monthlyAmount = mulDiv(totalAmounts[j], 500000000000000000, 1e18);
 				//afterDay = vestingType.monthDelay.mul(30 days);
 				monthlyAmount =  mulDiv(totalAmounts[j], vestingType.monthRate, 1e18);
 				afterDay = vestingType.afterDays;
 			}
 			
-			if (vestingTypeIndex == 3) {
-				initialAmount = 0;
-			} else {
+			if (vestingTypeIndex != 3) {
 				initialAmount = mulDiv(totalAmounts[j], vestingType.initialRate, 1e18);
 			}
 			// Transfer Token to the Wallet
@@ -131,6 +133,10 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 			// Frozen Wallet
             addFrozenWallet(_address, totalAmount, dailyAmount, monthlyAmount, initialAmount, afterDay);
 			totalAmountVesting = totalAmountVesting + totalAmount;
+
+			unchecked {
+				++j;
+			}
         }
 
         return true;
