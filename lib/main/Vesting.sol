@@ -37,6 +37,13 @@ struct VestingType {
  * @dev All Method to permit handle the Vesting Process of MQM token
  */
 contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ERC20PermitUpgradeable {
+
+	error BothArrayLenghtNotEqual(); // Address and totalAmounts length must be same
+	error VestingTypeNotFound(); 
+	error TransferToZeroAddress(); 
+	error BlacklistedAddress(); 
+	error ZeroAmount(); //ERC20 MQM: total amount token is zero
+	error TransferAmountExceedsBalance(); //ERC20: transfer amount exceeds balance
 	// Mapping of FrozenWallet
 	// Address Wallets -> Struc FrozenWallet
 	mapping (address => FrozenWallet) public frozenWallets;
@@ -74,23 +81,23 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 	 * @param vestingTypeIndex Index corresponding to the List of Wallets to be Upload in the Smart Contract ERC20 of MQM Foundation
      */
     function addAllocations(address[] calldata addresses, uint256[] calldata totalAmounts, uint256 vestingTypeIndex) external onlyOwner() whenNotPaused() returns (bool) {
-        require(addresses.length == totalAmounts.length, "Address and totalAmounts length must be same");
+		if(addresses.length != totalAmounts.length) revert BothArrayLenghtNotEqual();
 		VestingType memory vestingType = vestingTypes[vestingTypeIndex];
-        require(vestingType.vesting, "Vesting type isn't found");
+		if(!vestingType.vesting) revert VestingTypeNotFound();
 
         uint256 addressesLength = addresses.length;
 		uint256 total = 0;
 
 		for(uint256 i = 0; i < addressesLength; i++) {
 			address _address = addresses[i];
-			require(_address != address(0), "ERC20: transfer to the zero address");
-			require(!isBlacklisted(_address), "ERC20 MQM: recipient account is blacklisted");
-			require(totalAmounts[i] != 0, "ERC20 MQM: total amount token is zero");
+			if(_address == address(0)) revert TransferToZeroAddress();
+			if(isBlacklisted(_address)) revert BlacklistedAddress();
+			if(totalAmounts[i] == 0) revert ZeroAmount();
 			total += totalAmounts[i];
 		}
 
 	    //_balances[msg.sender] = _balances[msg.sender].sub(total, "ERC20: transfer amount exceeds balance");
-		   require(token.balanceOf(address(this)) >= total,"ERC20: transfer amount exceeds balance");
+		if(token.balanceOf(address(this)) < total) revert TransferAmountExceedsBalance();
 
 
         for(uint256 j = 0; j < addressesLength; j++) {
