@@ -23,7 +23,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface MQMTokenV1Interface extends ethers.utils.Interface {
   functions: {
     "DOMAIN_SEPARATOR()": FunctionFragment;
-    "addAllocations(address[],uint256[],uint256)": FunctionFragment;
     "addBlacklist(address)": FunctionFragment;
     "addMetaQuantumWallet(address)": FunctionFragment;
     "addWhiteListed(address)": FunctionFragment;
@@ -32,7 +31,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "bridge(uint256,address,uint16)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
-    "canTransfer(address,uint256)": FunctionFragment;
     "circulatingSupply()": FunctionFragment;
     "claimValues(address,address)": FunctionFragment;
     "decimals()": FunctionFragment;
@@ -45,27 +43,19 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "estimateFees(address,uint16,address,bytes,bool,bytes)": FunctionFragment;
     "failedMessages(uint16,bytes,uint64)": FunctionFragment;
     "forceResumeReceive(uint16,bytes)": FunctionFragment;
-    "frozenWallets(address)": FunctionFragment;
     "getBlacklist()": FunctionFragment;
     "getBurnBeforeBlockNumber()": FunctionFragment;
     "getBurnBeforeBlockNumberDisabled()": FunctionFragment;
     "getConfig(uint16,uint16,address,uint256)": FunctionFragment;
-    "getDays(uint256)": FunctionFragment;
     "getGasLimit(bytes)": FunctionFragment;
     "getIsTransferDisabled()": FunctionFragment;
     "getMaxTotalSupply()": FunctionFragment;
     "getMetaQuantumWallets()": FunctionFragment;
-    "getMonths(uint256)": FunctionFragment;
-    "getReleaseTime()": FunctionFragment;
-    "getRestAmount(address)": FunctionFragment;
-    "getTimestamp()": FunctionFragment;
-    "getTransferableAmount(address)": FunctionFragment;
     "getWhiteListWallets()": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "initialize()": FunctionFragment;
     "isBlacklisted(address)": FunctionFragment;
     "isMetaQuantumWallet(address)": FunctionFragment;
-    "isStarted(uint256)": FunctionFragment;
     "isTrustedRemote(uint16,bytes)": FunctionFragment;
     "isWhiteListed(address)": FunctionFragment;
     "lzEndpoint()": FunctionFragment;
@@ -95,16 +85,11 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "transferOwnership(address)": FunctionFragment;
     "trustAddress(address,uint16)": FunctionFragment;
     "trustedRemoteLookup(uint16)": FunctionFragment;
-    "vestingTypes(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "DOMAIN_SEPARATOR",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addAllocations",
-    values: [string[], BigNumberish[], BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "addBlacklist",
@@ -132,10 +117,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
-  encodeFunctionData(
-    functionFragment: "canTransfer",
-    values: [string, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "circulatingSupply",
     values?: undefined
@@ -182,10 +163,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values: [BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "frozenWallets",
-    values: [string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getBlacklist",
     values?: undefined
   ): string;
@@ -202,10 +179,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getDays",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getGasLimit",
     values: [BytesLike]
   ): string;
@@ -220,26 +193,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getMetaQuantumWallets",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getMonths",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getReleaseTime",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRestAmount",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTimestamp",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTransferableAmount",
-    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getWhiteListWallets",
@@ -260,10 +213,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "isMetaQuantumWallet",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isStarted",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isTrustedRemote",
@@ -368,17 +317,9 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "trustedRemoteLookup",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "vestingTypes",
-    values: [BigNumberish]
-  ): string;
 
   decodeFunctionResult(
     functionFragment: "DOMAIN_SEPARATOR",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "addAllocations",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -398,10 +339,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "bridge", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "canTransfer",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "circulatingSupply",
     data: BytesLike
@@ -448,10 +385,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "frozenWallets",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "getBlacklist",
     data: BytesLike
   ): Result;
@@ -464,7 +397,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getConfig", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getDays", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getGasLimit",
     data: BytesLike
@@ -479,23 +411,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getMetaQuantumWallets",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getMonths", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getReleaseTime",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRestAmount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTimestamp",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTransferableAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -515,7 +430,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "isMetaQuantumWallet",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "isStarted", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isTrustedRemote",
     data: BytesLike
@@ -593,10 +507,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     functionFragment: "trustedRemoteLookup",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "vestingTypes",
-    data: BytesLike
-  ): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -616,7 +526,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
     "TransferBurned(address,uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
     "ValueReceived(address,uint256)": EventFragment;
-    "inFrozenWallet(bool,uint32,uint32,address,uint256,uint256,uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
@@ -636,7 +545,6 @@ interface MQMTokenV1Interface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "TransferBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ValueReceived"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "inFrozenWallet"): EventFragment;
 }
 
 export class MQMTokenV1 extends Contract {
@@ -686,20 +594,6 @@ export class MQMTokenV1 extends Contract {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<[string]>;
 
     "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<[string]>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     addBlacklist(
       _account: string,
@@ -785,18 +679,6 @@ export class MQMTokenV1 extends Contract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
 
     circulatingSupply(
       overrides?: CallOverrides
@@ -932,56 +814,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    frozenWallets(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
-
     getBlacklist(overrides?: CallOverrides): Promise<[string[]]>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<[string[]]>;
@@ -1016,16 +848,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { dias: BigNumber }>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { dias: BigNumber }>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -1047,44 +869,6 @@ export class MQMTokenV1 extends Contract {
     getMetaQuantumWallets(overrides?: CallOverrides): Promise<[string[]]>;
 
     "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<[string[]]>;
-
-    getMonths(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { months: BigNumber }>;
-
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { months: BigNumber }>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "getReleaseTime()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { restAmount: BigNumber }>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { restAmount: BigNumber }>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { transferableAmount: BigNumber }>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { transferableAmount: BigNumber }>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<[string[]]>;
 
@@ -1127,16 +911,6 @@ export class MQMTokenV1 extends Contract {
 
     "isMetaQuantumWallet(address)"(
       _account: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
@@ -1448,71 +1222,11 @@ export class MQMTokenV1 extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
-
-    "vestingTypes(uint256)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
   };
 
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
   "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<string>;
-
-  addAllocations(
-    addresses: string[],
-    totalAmounts: BigNumberish[],
-    vestingTypeIndex: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  "addAllocations(address[],uint256[],uint256)"(
-    addresses: string[],
-    totalAmounts: BigNumberish[],
-    vestingTypeIndex: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   addBlacklist(
     _account: string,
@@ -1598,18 +1312,6 @@ export class MQMTokenV1 extends Contract {
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  canTransfer(
-    sender: string,
-    amount: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "canTransfer(address,uint256)"(
-    sender: string,
-    amount: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
 
   circulatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1741,56 +1443,6 @@ export class MQMTokenV1 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  frozenWallets(
-    arg0: string,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      boolean,
-      number,
-      number,
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      scheduled: boolean;
-      startDay: number;
-      afterDays: number;
-      wallet: string;
-      totalAmount: BigNumber;
-      dailyAmount: BigNumber;
-      monthlyAmount: BigNumber;
-      initialAmount: BigNumber;
-    }
-  >;
-
-  "frozenWallets(address)"(
-    arg0: string,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      boolean,
-      number,
-      number,
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      scheduled: boolean;
-      startDay: number;
-      afterDays: number;
-      wallet: string;
-      totalAmount: BigNumber;
-      dailyAmount: BigNumber;
-      monthlyAmount: BigNumber;
-      initialAmount: BigNumber;
-    }
-  >;
-
   getBlacklist(overrides?: CallOverrides): Promise<string[]>;
 
   "getBlacklist()"(overrides?: CallOverrides): Promise<string[]>;
@@ -1821,16 +1473,6 @@ export class MQMTokenV1 extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getDays(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "getDays(uint256)"(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   getGasLimit(
     _adapterParams: BytesLike,
     overrides?: CallOverrides
@@ -1852,41 +1494,6 @@ export class MQMTokenV1 extends Contract {
   getMetaQuantumWallets(overrides?: CallOverrides): Promise<string[]>;
 
   "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<string[]>;
-
-  getMonths(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "getMonths(uint256)"(
-    afterDays: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getReleaseTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "getReleaseTime()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getRestAmount(sender: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  "getRestAmount(address)"(
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "getTimestamp()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getTransferableAmount(
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "getTransferableAmount(address)"(
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   getWhiteListWallets(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1926,16 +1533,6 @@ export class MQMTokenV1 extends Contract {
 
   "isMetaQuantumWallet(address)"(
     _account: string,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isStarted(
-    startDay: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "isStarted(uint256)"(
-    startDay: BigNumberish,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -2245,70 +1842,10 @@ export class MQMTokenV1 extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  vestingTypes(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      boolean
-    ] & {
-      dailyRate: BigNumber;
-      initialRate: BigNumber;
-      afterDays: BigNumber;
-      monthRate: BigNumber;
-      monthDelay: BigNumber;
-      vesting: boolean;
-      vestingType: boolean;
-    }
-  >;
-
-  "vestingTypes(uint256)"(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      boolean
-    ] & {
-      dailyRate: BigNumber;
-      initialRate: BigNumber;
-      afterDays: BigNumber;
-      monthRate: BigNumber;
-      monthDelay: BigNumber;
-      vesting: boolean;
-      vestingType: boolean;
-    }
-  >;
-
   callStatic: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
     "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<string>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     addBlacklist(_account: string, overrides?: CallOverrides): Promise<void>;
 
@@ -2388,18 +1925,6 @@ export class MQMTokenV1 extends Contract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     circulatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2524,56 +2049,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    frozenWallets(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
-
     getBlacklist(overrides?: CallOverrides): Promise<string[]>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<string[]>;
@@ -2606,16 +2081,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -2637,44 +2102,6 @@ export class MQMTokenV1 extends Contract {
     getMetaQuantumWallets(overrides?: CallOverrides): Promise<string[]>;
 
     "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<string[]>;
-
-    getMonths(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getReleaseTime()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<string[]>;
 
@@ -2713,16 +2140,6 @@ export class MQMTokenV1 extends Contract {
 
     "isMetaQuantumWallet(address)"(
       _account: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -3021,52 +2438,6 @@ export class MQMTokenV1 extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
-
-    "vestingTypes(uint256)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        boolean
-      ] & {
-        dailyRate: BigNumber;
-        initialRate: BigNumber;
-        afterDays: BigNumber;
-        monthRate: BigNumber;
-        monthDelay: BigNumber;
-        vesting: boolean;
-        vestingType: boolean;
-      }
-    >;
   };
 
   filters: {
@@ -3179,58 +2550,12 @@ export class MQMTokenV1 extends Contract {
       [string, BigNumber],
       { sender: string; value: BigNumber }
     >;
-
-    inFrozenWallet(
-      scheduled: null,
-      startDay: null,
-      afterDays: null,
-      wallet: string | null,
-      totalAmount: BigNumberish | null,
-      dailyAmount: null,
-      monthlyAmount: null,
-      initialAmount: null
-    ): TypedEventFilter<
-      [
-        boolean,
-        number,
-        number,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ],
-      {
-        scheduled: boolean;
-        startDay: number;
-        afterDays: number;
-        wallet: string;
-        totalAmount: BigNumber;
-        dailyAmount: BigNumber;
-        monthlyAmount: BigNumber;
-        initialAmount: BigNumber;
-      }
-    >;
   };
 
   estimateGas: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
     "DOMAIN_SEPARATOR()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
 
     addBlacklist(
       _account: string,
@@ -3315,18 +2640,6 @@ export class MQMTokenV1 extends Contract {
     "burn(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     circulatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
@@ -3455,13 +2768,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    frozenWallets(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getBlacklist(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -3494,16 +2800,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -3525,44 +2821,6 @@ export class MQMTokenV1 extends Contract {
     getMetaQuantumWallets(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getMetaQuantumWallets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getMonths(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getReleaseTime()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     getWhiteListWallets(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -3605,16 +2863,6 @@ export class MQMTokenV1 extends Contract {
 
     "isMetaQuantumWallet(address)"(
       _account: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3926,16 +3174,6 @@ export class MQMTokenV1 extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "vestingTypes(uint256)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -3943,20 +3181,6 @@ export class MQMTokenV1 extends Contract {
 
     "DOMAIN_SEPARATOR()"(
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    addAllocations(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "addAllocations(address[],uint256[],uint256)"(
-      addresses: string[],
-      totalAmounts: BigNumberish[],
-      vestingTypeIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     addBlacklist(
@@ -4045,18 +3269,6 @@ export class MQMTokenV1 extends Contract {
     "burn(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    canTransfer(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "canTransfer(address,uint256)"(
-      sender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     circulatingSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -4187,16 +3399,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    frozenWallets(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "frozenWallets(address)"(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getBlacklist(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "getBlacklist()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -4233,16 +3435,6 @@ export class MQMTokenV1 extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getDays(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "getDays(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getGasLimit(
       _adapterParams: BytesLike,
       overrides?: CallOverrides
@@ -4272,46 +3464,6 @@ export class MQMTokenV1 extends Contract {
     ): Promise<PopulatedTransaction>;
 
     "getMetaQuantumWallets()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getMonths(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "getMonths(uint256)"(
-      afterDays: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getReleaseTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "getReleaseTime()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getRestAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "getRestAmount(address)"(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getTimestamp(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "getTimestamp()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getTransferableAmount(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "getTransferableAmount(address)"(
-      sender: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -4360,16 +3512,6 @@ export class MQMTokenV1 extends Contract {
 
     "isMetaQuantumWallet(address)"(
       _account: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isStarted(
-      startDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "isStarted(uint256)"(
-      startDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -4681,16 +3823,6 @@ export class MQMTokenV1 extends Contract {
     ): Promise<PopulatedTransaction>;
 
     "trustedRemoteLookup(uint16)"(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    vestingTypes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "vestingTypes(uint256)"(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

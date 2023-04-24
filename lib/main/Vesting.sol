@@ -66,7 +66,7 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
      * @dev Method to permit to get the Exactly Unix Epoch of Token Generate Event
      */
 	function getReleaseTime() public pure returns (uint256) {
-        return 1626440400; // "Friday, 16 July 2021 13:00:00 GMT"
+        return 1688250429; // Saturday, July 1, 2023 10:27:09 PM
     }
 
     /**
@@ -86,14 +86,16 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 
 		for(uint256 i = 0; i < addressesLength; i++) {
 			address _address = addresses[i];
-			require(_address != address(0), "ERC20: transfer to the zero address");
+			require(_address != address(0), "ERC20 MQM: transfer to the zero address");
 			require(!isBlacklisted(_address), "ERC20 MQM: recipient account is blacklisted");
 			require(totalAmounts[i] != 0, "ERC20 MQM: total amount token is zero");
 			total = total.add(totalAmounts[i]);
 		}
 
 	    //_balances[msg.sender] = _balances[msg.sender].sub(total, "ERC20: transfer amount exceeds balance");
-		   require(token.balanceOf(address(this)) >= total,"ERC20: transfer amount exceeds balance");
+		   //require(token.balanceOf(address(this)) >= total,"ERC20: transfer amount exceeds balance");
+		   //require(token.balanceOf(address(this)) >= total ,"ERC20: transfer amount exceeds balance");
+		   require(token.balanceOf(address(this)).sub(totalAmountVesting) >= total ,"ERC20: transfer amount exceeds balance");
 
 
         for(uint256 j = 0; j < addressesLength; j++) {
@@ -115,11 +117,9 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 				afterDay = vestingType.afterDays;
 			}
 			
-			if (vestingTypeIndex == 3) {
-				initialAmount = 0;
-			} else {
+			
 				initialAmount = mulDiv(totalAmounts[j], vestingType.initialRate, 1e18);
-			}
+			
 			// Transfer Token to the Wallet
             //_balances[_address] = _balances[_address].add(totalAmount);
 			//emit Transfer(msg.sender, _address, totalAmount);
@@ -179,7 +179,7 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
     }
 
     /**
-     * @dev Auxiliary Method to permit get the number of days elapsed time from the TGE to the current moment
+     * @dev Auxiliary Method to permit get the number of days eltransapsed time from the TGE to the current moment
 	 * @param afterDays Period of Days after to start Unlocked Token based on the Allocation to participate
 	 */
     function getDays(uint256 afterDays) public view returns (uint256 dias) {
@@ -227,11 +227,12 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
      * @dev Auxiliary Method to permit get of token can be transferable based on Allocation of the Frozen Wallet
 	 * @param sender Wallets of Stakeholders to verify amount of Token are Unlocked based on Allocation
 	 */
-    function getTransferableAmount(address sender) public view returns (uint256 transferableAmount) {
+
+	 function getTransferableAmount(address sender) public view returns (uint256 transferableAmount) {
 		uint256 releaseTime = getReleaseTime();
 
 		if (block.timestamp < releaseTime) {
-            return transferableAmount;
+             return transferableAmount;
         }
 
 		FrozenWallet memory frozenWallet = frozenWallets[sender];
@@ -244,13 +245,15 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 		if ((frozenWallet.monthlyAmount != 0) && (frozenWallet.dailyAmount == 0)) {
 			uint256 meses = getMonths(frozenWallet.afterDays);
 			uint256 monthlyTransferableAmount = frozenWallet.monthlyAmount.mul(meses);
-			transferableAmount = monthlyTransferableAmount.add(frozenWallet.initialAmount);
+			transferableAmount = monthlyTransferableAmount.add(frozenWallet.initialAmount);	
 		}
 
         if (transferableAmount > frozenWallet.totalAmount) {
             return frozenWallet.totalAmount;
-        }
+	    }
     }
+
+ 
 
     /**
      * @dev Auxiliary Method to permit get of token can't be transferable based on Allocation of the Frozen Wallet
@@ -259,6 +262,10 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 	function getRestAmount(address sender) public view returns (uint256 restAmount) {
         uint256 transferableAmount = getTransferableAmount(sender);
         restAmount = frozenWallets[sender].totalAmount.sub(transferableAmount);
+    }
+
+	function getFrozenWallet(address sender) public view returns (uint256 amount) {
+        amount = frozenWallets[sender].totalAmount;
     }
 
 	function getToken() external view returns (address){

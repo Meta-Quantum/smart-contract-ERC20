@@ -40,7 +40,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
  
 	/**
      * @dev Implementation / Instance of TransferMany of MQM Token.
-	 * @dev This method permitr to habdle AirDrop process with a reduce cost of gas in at least 30%
+	 * @dev This method permit to handle AirDrop process with a reduce cost of gas in at least 30%
      * @param recipients Array of Address to receive the Tokens in AirDrop process
 	 * @param amounts Array of Amounts of token to receive
      *
