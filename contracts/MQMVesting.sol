@@ -49,7 +49,7 @@ function initialize(address token_) initializer() public  {
         token = ERC20Upgradeable(token_);
     }
 
-    function deposit(uint256 amount) public payable onlyOwner {
+    function deposit(uint256 amount) public onlyOwner {
         uint256 releaseTime = getReleaseTime();
         if(block.timestamp > releaseTime){
             revert DepositPeriodOver();
