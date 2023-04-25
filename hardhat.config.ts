@@ -9,6 +9,7 @@ import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-spdx-license-identifier';
 import '@nomiclabs/hardhat-etherscan';
 import 'dotenv/config';
+import 'solidity-coverage';
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -28,6 +29,7 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
  */
  export default  {
 	networks: {
+		
 		mainnet: {
 			chainId: 1,
 			url: process.env.URL_MAINNET_ETH,
@@ -95,6 +97,7 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 			gasPrice: 35000000000,
 			blockGasLimit: 149000000,
 			chainId: 31337,
+			initialBaseFeePerGas: 0,
 			accounts: {
 				mnemonic:process.env.MNEMONIC,
 				count:parseInt(`${process.env.ACCOUNTS}`)
@@ -107,8 +110,9 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 			optimizer: {
 				enabled: true,
 				runs: 500
-			}
-		}
+			},
+		},
+		allowUnlimitedContractSize: true,
 	},
 	paths: {
 		sources: "./contracts",
