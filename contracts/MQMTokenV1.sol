@@ -6,19 +6,26 @@
 pragma solidity 0.8.4;
 pragma experimental ABIEncoderV2;
 
-import "../lib/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "../lib/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../lib/main/lzApp/NonblockingLzAppUpgradeable.sol";
 import "../lib/main/Vesting.sol";
 
 
 
-contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ERC20PermitUpgradeable, NonblockingLzAppUpgradeable{
+contract MQMTokenV1 is OwnableUpgradeable, Claimable, PausableUpgradeable, ERC20PermitUpgradeable, NonblockingLzAppUpgradeable{
 	using AddressUpgradeable for address;
-	using SafeMathUpgradeable for uint256;
 	using SafeERC20Upgradeable for IERC20Upgradeable;
+
+    error WrongArrayLength();
+    error TranferToZeroAddress();
+    error RecipientIsBlacklisted();
+    error ZeroAmount();
+    error AmountExceedsBalance();
+    error TokenActionWhilePaused();
+    error MaximumSupplyOverflow();
+
 	// Constant Max Total Supply of MQM token
- 	uint256 private constant _maxTotalSupply = 100_000_000 * (uint256(10) ** uint256(18));
+ 	uint256 private constant _maxTotalSupply = 100_000_000_000_000_000_000_000_000;
 
 	function initialize() initializer() public {
 		__Ownable_init();
@@ -40,7 +47,7 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
  
 	/**
      * @dev Implementation / Instance of TransferMany of MQM Token.
-	 * @dev This method permitr to habdle AirDrop process with a reduce cost of gas in at least 30%
+	 * @dev This method permit to handle AirDrop process with a reduce cost of gas in at least 30%
      * @param recipients Array of Address to receive the Tokens in AirDrop process
 	 * @param amounts Array of Amounts of token to receive
      *
@@ -48,25 +55,47 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
 
 	function transferMany(address[] calldata recipients, uint256[] calldata amounts) external onlyOwner() whenNotPaused()
     {
-        require(recipients.length == amounts.length, "ERC20 MQM: Wrong array length");
-
-        uint256 total = 0;
-        for (uint256 i = 0; i < amounts.length; i++) {
-			address recipient = recipients[i];
-			require(recipient != address(0), "ERC20: transfer to the zero address");
-			require(!isBlacklisted(recipient), "ERC20 MQM: recipient account is blacklisted");
-			require(amounts[i] != 0, "ERC20 MQM: total amount token is zero");
-            total = total.add(amounts[i]);
+        if(recipients.length != amounts.length){
+            revert WrongArrayLength();
         }
 
-	    _balances[msg.sender] = _balances[msg.sender].sub(total, "ERC20: transfer amount exceeds balance");
+        uint256 total;
+        uint256 amountsNb = amounts.length;
+        for (uint256 i; i < amountsNb;) {
+			address recipient = recipients[i];
+            if(recipient == address(0)){
+                revert TranferToZeroAddress();
+            }
+            if(isBlacklisted(recipient)){
+                revert RecipientIsBlacklisted();
+            }
+            if(amounts[i] == 0){
+                revert ZeroAmount();
+            }
+            total += amounts[i];
 
-        for (uint256 i = 0; i < recipients.length; i++) {
+            unchecked {
+                ++i;
+            }
+        }
+
+        if(total > _balances[msg.sender]){
+            revert AmountExceedsBalance();
+        }
+
+	    _balances[msg.sender] -= total;
+
+        uint256 recipientsNb = recipients.length;
+        for (uint256 i; i < recipientsNb;) {
             address recipient = recipients[i];
             uint256 amount = amounts[i];
 
-            _balances[recipient] = _balances[recipient].add(amount);
+            _balances[recipient] += amount;
             emit Transfer(msg.sender, recipient, amount);
+
+            unchecked {
+                ++i;
+            }
         }
     }
 
@@ -75,11 +104,15 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
      */
 	function circulatingSupply() public view returns (uint256 result) {
 		uint256 index = metaquantum_wallets.length;
-		result = totalSupply().sub(balanceOf(owner()));
-		for (uint256 i=0; i < index ; i++ ) {
+		result = totalSupply() - balanceOf(owner());
+		for (uint256 i; i < index ;) {
 			if ((metaquantum_wallets[i] != address(0)) && (result != 0)) {
 				result -= balanceOf(metaquantum_wallets[i]);
 			}
+
+            unchecked {
+                ++i;
+            }
 		}
 	}
 
@@ -134,11 +167,10 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
      * @param amount Amount token to transfer/transferFrom/mint/burn
      * See {ERC20 Upgradeable}.
      */
-	function _beforeTokenTransfer(address sender, address recipient, uint256 amount) internal virtual override notBlacklisted(sender) {
-		require(!isBlacklisted(recipient), "ERC20 MQM: recipient account is blacklisted");
+	function _beforeTokenTransfer(address sender, address recipient, uint256 amount) internal virtual override notBlacklisted(sender) notBlacklisted(recipient) {
 		// Permit the Owner execute token transfer/mint/burn while paused contract
-		if (_msgSender() != owner()) {
-			require(!paused(), "ERC20 MQM: token transfer/mint/burn while paused");
+		if (_msgSender() != owner() && paused()) {
+            revert TokenActionWhilePaused();
 		}
         super._beforeTokenTransfer(sender, recipient, amount);
     }
@@ -173,7 +205,9 @@ contract MQMTokenV1 is OwnableUpgradeable, Math, Claimable, PausableUpgradeable,
 		 * - After upgrade the SmartContract and Eliminate this method
      */
     function mint( uint256 _amount) public onlyOwner() {
-		require(getMaxTotalSupply() >= totalSupply().add(_amount), "ERC20: Can't Mint, it exceeds the maximum supply ");
+        if(getMaxTotalSupply() < (totalSupply()+_amount)){
+            revert MaximumSupplyOverflow();
+        }
         _mint(owner(), _amount);
     }
 
