@@ -43,6 +43,7 @@ interface MQMVestingInterface extends ethers.utils.Interface {
     "getBurnBeforeBlockNumber()": FunctionFragment;
     "getBurnBeforeBlockNumberDisabled()": FunctionFragment;
     "getDays(uint256)": FunctionFragment;
+    "getFrozenWallet(address)": FunctionFragment;
     "getIsTransferDisabled()": FunctionFragment;
     "getMetaQuantumWallets()": FunctionFragment;
     "getMonths(uint256)": FunctionFragment;
@@ -158,6 +159,10 @@ interface MQMVestingInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getDays",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getFrozenWallet",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getIsTransferDisabled",
@@ -342,6 +347,10 @@ interface MQMVestingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getDays", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getFrozenWallet",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getIsTransferDisabled",
     data: BytesLike
@@ -750,6 +759,15 @@ export class MQMVesting extends Contract {
       afterDays: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { dias: BigNumber }>;
+    getFrozenWallet(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { amount: BigNumber }>;
+
+    "getFrozenWallet(address)"(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { amount: BigNumber }>;
 
     getIsTransferDisabled(overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -1270,6 +1288,17 @@ export class MQMVesting extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+
+  getFrozenWallet(
+    sender: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "getFrozenWallet(address)"(
+    sender: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getIsTransferDisabled(overrides?: CallOverrides): Promise<boolean>;
 
   "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<boolean>;
@@ -1764,6 +1793,16 @@ export class MQMVesting extends Contract {
 
     "getDays(uint256)"(
       afterDays: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getFrozenWallet(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getFrozenWallet(address)"(
+      sender: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2348,6 +2387,16 @@ export class MQMVesting extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getFrozenWallet(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getFrozenWallet(address)"(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getIsTransferDisabled(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getIsTransferDisabled()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -2818,6 +2867,16 @@ export class MQMVesting extends Contract {
 
     "getDays(uint256)"(
       afterDays: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getFrozenWallet(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getFrozenWallet(address)"(
+      sender: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

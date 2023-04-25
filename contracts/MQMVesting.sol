@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: ISC
 
-
-
 /// @title MetaQuantum Token V1
 /// @author Arthur Miranda / MQM 2023.3 */
 
@@ -29,7 +27,8 @@ error ExceedsTransferableAmount();
  
 
 function initialize(address token_) initializer() public  {
-		// Allocation #1 / VestingType # 0, Angels Investors & KOLs Total (2.5)%, TGE Unlocked 5%(50000000000000000) and Start with 8 Months(245 days) Locked the Token
+		__Ownable_init();
+        // Allocation #1 / VestingType # 0, Angels Investors & KOLs Total (2.5)%, TGE Unlocked 5%(50000000000000000) and Start with 8 Months(245 days) Locked the Token
 		vestingTypes.push(VestingType(0, 50000000000000000, 245 days, 79166666666666700, true, false)); // 8 Months (245 days) Locked, 0.079166666666666700% (79166666666666700) Percent monthly per 12 Months for the 95% Rest
 	    // Allocation #2 / VestingType # 1, Seed Total (7)%, TGE Unlocked 7% (70000000000000000) and Start with 6 Months (184 days) Locked the Token
         vestingTypes.push(VestingType(0, 70000000000000000, 184 days, 93000000000000000, true, false)); // 184 days Locked, 0.093000000000000000% (93000000000000000) Percent monthly per 10 Months for the 93% Rest
@@ -48,7 +47,7 @@ function initialize(address token_) initializer() public  {
         // Allocation #9 / VestingType # 8, Team Total (15)%, TGE Unlocked 0% (0), and Start After 12 Months (366 days) Locked the Token
 		vestingTypes.push(VestingType(0, 0, 366 days, 41666666666666700, true, false)); // 366 days Locked, 0.041666666666666700 (41666666666666700) Percent monthly per 24 Months for the 100% Rest
 		// Allocation #10 / VestingType # 9, Treasury Total (12.5)% TGE Unlocked 0% (0), and Start After 18 Months (550 days) Locked the Token
-		vestingTypes.push(VestingType(0, 0, 550 days, 0, true, false)); // 550 days Locked, 0.055555555555555600 (55555555555555600) Percent monthly per 18 Months for the 100% Rest
+		vestingTypes.push(VestingType(0, 0, 550 days, 55555555555555600, true, false)); // 550 days Locked, 0.055555555555555600 (55555555555555600) Percent monthly per 18 Months for the 100% Rest
 
         //Set the token address
         token = ERC20Upgradeable(token_);
@@ -79,13 +78,14 @@ function initialize(address token_) initializer() public  {
         }
 
         uint256 transferableAmount = getTransferableAmount(msg.sender);
-        if(amount>=transferableAmount){
+        if(amount>transferableAmount){
             revert ExceedsTransferableAmount();
         }
 
         if(!token.transfer(msg.sender, amount)){
             revert TransferFailed();
         }
+      
         emit Transfer(msg.sender, address(this), amount);
     }
 
