@@ -123,9 +123,7 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 				afterDay = vestingType.afterDays;
 			}
 			
-			if (vestingTypeIndex != 3) {
-				initialAmount = mulDiv(totalAmounts[j], vestingType.initialRate, 1e18);
-			}
+			initialAmount = mulDiv(totalAmounts[j], vestingType.initialRate, 1e18);
 			// Transfer Token to the Wallet
             //_balances[_address] = _balances[_address].add(totalAmount);
 			//emit Transfer(msg.sender, _address, totalAmount);
