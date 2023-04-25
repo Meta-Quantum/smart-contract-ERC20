@@ -3,6 +3,7 @@
 /* eslint-disable */
 export type { ERC20Token } from "./ERC20Token";
 export type { MQMTokenV1 } from "./MQMTokenV1";
+export type { MQMVesting } from "./MQMVesting";
 export type { OwnableUpgradeable } from "./OwnableUpgradeable";
 export type { IERC1271Upgradeable } from "./IERC1271Upgradeable";
 export type { PausableUpgradeable } from "./PausableUpgradeable";
@@ -24,6 +25,7 @@ export type { Vesting } from "./Vesting";
 
 export { ERC20Token__factory } from "./factories/ERC20Token__factory";
 export { MQMTokenV1__factory } from "./factories/MQMTokenV1__factory";
+export { MQMVesting__factory } from "./factories/MQMVesting__factory";
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
 export { IERC1271Upgradeable__factory } from "./factories/IERC1271Upgradeable__factory";
 export { PausableUpgradeable__factory } from "./factories/PausableUpgradeable__factory";
