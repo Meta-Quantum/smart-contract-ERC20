@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: ISC
 
+
+
+
+
 /// @title MetaQuantum Token V1
 /// @author Arthur Miranda / MQM 2023.3 */
 
@@ -70,7 +74,7 @@ function initialize(address token_) initializer() public  {
         FrozenWallet memory frozenWallet = frozenWallets[msg.sender];
         uint256 releaseTime = getReleaseTime();
         
-        if(block.timestamp > releaseTime && block.timestamp < releaseTime + frozenWallet.afterDays)){
+        if(block.timestamp > releaseTime && block.timestamp < releaseTime + frozenWallet.afterDays){
             revert LockPeriodOngoing();
         }
 

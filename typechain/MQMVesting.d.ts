@@ -759,6 +759,7 @@ export class MQMVesting extends Contract {
       afterDays: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { dias: BigNumber }>;
+
     getFrozenWallet(
       sender: string,
       overrides?: CallOverrides
@@ -1287,7 +1288,6 @@ export class MQMVesting extends Contract {
     afterDays: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
 
   getFrozenWallet(
     sender: string,

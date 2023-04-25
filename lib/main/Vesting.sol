@@ -123,9 +123,7 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 				afterDay = vestingType.afterDays;
 			}
 			
-			if (vestingTypeIndex != 3) {
-
-				initialAmount = mulDiv(totalAmounts[j], vestingType.initialRate, 1e18);
+			initialAmount = mulDiv(totalAmounts[j], vestingType.initialRate, 1e18);
 			
 			// Transfer Token to the Wallet
             //_balances[_address] = _balances[_address].add(totalAmount);
@@ -138,10 +136,10 @@ contract Vesting is OwnableUpgradeable, Math, Claimable, PausableUpgradeable, ER
 			unchecked {
 				++j;
 			}
-        }
-
+        
         return true;
-    }
+    	}
+	}
 
     /**
      * @dev Auxiliary Method to permit Upload all wallets in all allocation, based on Vesting Process
